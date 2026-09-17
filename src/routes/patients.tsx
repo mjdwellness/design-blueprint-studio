@@ -53,34 +53,34 @@ function PatientsPage() {
         subtitle="1,284 active patients synced from Practice Fusion."
         actions={
           <>
-            <button className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium hover:bg-muted">
-              <Filter className="size-4" /> Filters
+            <button className="inline-flex h-8 items-center gap-1.5 rounded border border-border bg-surface px-3 text-xs font-medium hover:bg-muted">
+              <Filter className="size-3.5" /> Filters
             </button>
-            <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-              <UserPlus className="size-4" /> Add Patient
+            <button className="inline-flex h-8 items-center gap-1.5 rounded bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary/90">
+              <UserPlus className="size-3.5" /> Add Patient
             </button>
           </>
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid overflow-hidden rounded-md border border-border sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={<Users className="size-5" />} tone="blue" value="1,284" label="Active patients" />
         <StatCard icon={<UserPlus className="size-5" />} tone="green" value="46" label="New this month" delta="+11%" />
         <StatCard icon={<FileText className="size-5" />} tone="orange" value="9" label="Forms pending" />
         <StatCard icon={<CalendarDays className="size-5" />} tone="purple" value="18" label="Scheduled today" />
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <Panel title="Patient Directory" bodyClassName="p-0">
+      <div className="mt-4 grid min-h-[calc(100vh-12rem)] overflow-hidden rounded-md border border-border xl:grid-cols-[minmax(550px,1.55fr)_minmax(360px,1fr)]">
+        <Panel title="Patient Directory" bodyClassName="p-0" className="rounded-none border-0 xl:border-r">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-muted/60 text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <th className="px-5 py-3 font-medium">Patient</th>
-                  <th className="px-5 py-3 font-medium">Provider</th>
-                  <th className="px-5 py-3 font-medium">Next visit</th>
-                  <th className="px-5 py-3 font-medium">Balance</th>
-                  <th className="px-5 py-3 font-medium">Status</th>
+                <tr className="border-b border-border bg-muted/40 text-left text-[9px] uppercase text-muted-foreground">
+                  <th className="px-4 py-2 font-medium">Patient</th>
+                  <th className="px-4 py-2 font-medium">Provider</th>
+                  <th className="px-4 py-2 font-medium">Next visit</th>
+                  <th className="px-4 py-2 font-medium">Balance</th>
+                  <th className="px-4 py-2 font-medium">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,11 +88,11 @@ function PatientsPage() {
                   <tr
                     key={p.id}
                     onClick={() => setSelected(p)}
-                    className={`cursor-pointer border-b border-border last:border-0 hover:bg-muted/40 ${
-                      selected.id === p.id ? "bg-info-soft" : ""
+                    className={`cursor-pointer border-b border-border text-xs last:border-0 hover:bg-muted/40 ${
+                      selected.id === p.id ? "bg-primary/8" : ""
                     }`}
                   >
-                    <td className="px-5 py-3">
+                    <td className="px-4 py-2.5">
                       <div className="flex items-center gap-3">
                         <Initials name={p.name} />
                         <span>
@@ -103,10 +103,10 @@ function PatientsPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-5 py-3 text-muted-foreground">{p.provider}</td>
-                    <td className="px-5 py-3 text-muted-foreground">{p.next}</td>
-                    <td className="px-5 py-3 font-medium text-foreground">{p.balance}</td>
-                    <td className="px-5 py-3">
+                    <td className="px-4 py-2.5 text-muted-foreground">{p.provider}</td>
+                    <td className="px-4 py-2.5 text-muted-foreground">{p.next}</td>
+                    <td className="px-4 py-2.5 font-medium text-foreground">{p.balance}</td>
+                    <td className="px-4 py-2.5">
                       <Pill tone={p.tone}>{p.status}</Pill>
                     </td>
                   </tr>
@@ -116,40 +116,40 @@ function PatientsPage() {
           </div>
         </Panel>
 
-        <Panel bodyClassName="p-0">
-          <div className="border-b border-border p-5">
+        <Panel bodyClassName="p-0" className="rounded-none border-0">
+          <div className="border-b border-border p-4">
             <div className="flex items-center gap-3">
-              <Initials name={selected.name} className="size-14 text-base" />
+              <Initials name={selected.name} className="size-11 text-sm" />
               <div>
-                <div className="text-lg font-semibold text-foreground">{selected.name}</div>
+                <div className="text-base font-semibold text-foreground">{selected.name}</div>
                 <div className="text-xs text-muted-foreground">
                   {selected.id} · DOB {selected.dob}
                 </div>
               </div>
             </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-3 py-2 text-xs font-medium text-primary-foreground">
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              <button className="inline-flex items-center gap-1.5 rounded bg-primary px-2.5 py-1.5 text-[11px] font-medium text-primary-foreground">
                 <Phone className="size-4" /> Call
               </button>
-              <button className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-xs font-medium hover:bg-muted">
+              <button className="inline-flex items-center gap-1.5 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted">
                 <MessageSquare className="size-4" /> Text
               </button>
-              <button className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-xs font-medium hover:bg-muted">
+              <button className="inline-flex items-center gap-1.5 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted">
                 <Mail className="size-4" /> Email
               </button>
-              <button className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-xs font-medium hover:bg-muted">
+              <button className="inline-flex items-center gap-1.5 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted">
                 <ExternalLink className="size-4" /> Open in EHR
               </button>
             </div>
           </div>
 
-          <div className="flex gap-1 overflow-x-auto border-b border-border px-3 py-2 text-sm">
+          <div className="flex gap-4 overflow-x-auto border-b border-border px-4 text-xs">
             {tabs.map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`whitespace-nowrap rounded-lg px-3 py-1.5 font-medium ${
-                  tab === t ? "bg-info-soft text-primary" : "text-muted-foreground hover:bg-muted"
+                className={`whitespace-nowrap border-b-2 px-0 py-3 font-medium ${
+                  tab === t ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {t}
@@ -157,7 +157,7 @@ function PatientsPage() {
             ))}
           </div>
 
-          <div className="p-5">
+          <div className="p-4">
             {tab === "Overview" ? (
               <dl className="space-y-3 text-sm">
                 {[
