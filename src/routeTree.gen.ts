@@ -24,6 +24,10 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TimeLaborRouteImport } from './routes/time-labor'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
+import { Route as AdminOrganizationsRouteImport } from './routes/admin/organizations'
+import { Route as AdminSubscriptionsRouteImport } from './routes/admin/subscriptions'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
 
@@ -102,6 +106,26 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLocationsRoute = AdminLocationsRouteImport.update({
+  id: '/admin/locations',
+  path: '/admin/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminOrganizationsRoute = AdminOrganizationsRouteImport.update({
+  id: '/admin/organizations',
+  path: '/admin/organizations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSubscriptionsRoute = AdminSubscriptionsRouteImport.update({
+  id: '/admin/subscriptions',
+  path: '/admin/subscriptions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
@@ -128,6 +152,10 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
+  '/admin/locations': typeof AdminLocationsRoute
+  '/admin/organizations': typeof AdminOrganizationsRoute
+  '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
@@ -147,6 +175,10 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
+  '/admin/locations': typeof AdminLocationsRoute
+  '/admin/organizations': typeof AdminOrganizationsRoute
+  '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/admin': typeof AdminIndexRoute
   '/settings': typeof SettingsIndexRoute
@@ -167,6 +199,10 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
+  '/admin/locations': typeof AdminLocationsRoute
+  '/admin/organizations': typeof AdminOrganizationsRoute
+  '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
@@ -188,6 +224,10 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/team'
     | '/time-labor'
+    | '/admin/locations'
+    | '/admin/organizations'
+    | '/admin/subscriptions'
+    | '/admin/users'
     | '/settings/roles'
     | '/admin/'
     | '/settings/'
@@ -207,6 +247,10 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/team'
     | '/time-labor'
+    | '/admin/locations'
+    | '/admin/organizations'
+    | '/admin/subscriptions'
+    | '/admin/users'
     | '/settings/roles'
     | '/admin'
     | '/settings'
@@ -226,6 +270,10 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/team'
     | '/time-labor'
+    | '/admin/locations'
+    | '/admin/organizations'
+    | '/admin/subscriptions'
+    | '/admin/users'
     | '/settings/roles'
     | '/admin/'
     | '/settings/'
@@ -246,6 +294,10 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   TeamRoute: typeof TeamRoute
   TimeLaborRoute: typeof TimeLaborRoute
+  AdminLocationsRoute: typeof AdminLocationsRoute
+  AdminOrganizationsRoute: typeof AdminOrganizationsRoute
+  AdminSubscriptionsRoute: typeof AdminSubscriptionsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   SettingsRolesRoute: typeof SettingsRolesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
@@ -358,6 +410,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/locations': {
+      id: '/admin/locations'
+      path: '/admin/locations'
+      fullPath: '/admin/locations'
+      preLoaderRoute: typeof AdminLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/organizations': {
+      id: '/admin/organizations'
+      path: '/admin/organizations'
+      fullPath: '/admin/organizations'
+      preLoaderRoute: typeof AdminOrganizationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/subscriptions': {
+      id: '/admin/subscriptions'
+      path: '/admin/subscriptions'
+      fullPath: '/admin/subscriptions'
+      preLoaderRoute: typeof AdminSubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings/': {
       id: '/settings/'
       path: '/settings'
@@ -390,6 +470,10 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   TeamRoute: TeamRoute,
   TimeLaborRoute: TimeLaborRoute,
+  AdminLocationsRoute: AdminLocationsRoute,
+  AdminOrganizationsRoute: AdminOrganizationsRoute,
+  AdminSubscriptionsRoute: AdminSubscriptionsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   SettingsRolesRoute: SettingsRolesRoute,
   AdminIndexRoute: AdminIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
