@@ -22,6 +22,13 @@
       "when": 1789687512860,
       "tag": "0002_add_patient_forms_payments_staff_hours",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789687560045,
+      "tag": "0003_link_staff_time_profiles",
+      "breakpoints": true
     }
   ]
 }
