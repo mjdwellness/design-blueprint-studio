@@ -1,0 +1,1 @@
+CREATE POLICY "Patients view assigned form templates" ON public.form_templates FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.patient_forms pf JOIN public.patients p ON p.id = pf.patient_id WHERE pf.template_id = form_templates.id AND p.profile_id = auth.uid()));

@@ -233,6 +233,92 @@ export type Database = {
           },
         ]
       }
+      form_fields: {
+        Row: {
+          created_at: string
+          field_type: string
+          id: string
+          label: string
+          position: number
+          required: boolean
+          template_id: string
+        }
+        Insert: {
+          created_at?: string
+          field_type?: string
+          id?: string
+          label: string
+          position?: number
+          required?: boolean
+          template_id: string
+        }
+        Update: {
+          created_at?: string
+          field_type?: string
+          id?: string
+          label?: string
+          position?: number
+          required?: boolean
+          template_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_fields_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "form_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+          organization_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          organization_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          organization_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_templates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       locations: {
         Row: {
           address_line1: string | null
@@ -409,7 +495,10 @@ export type Database = {
           id: string
           organization_id: string
           patient_id: string
+          responses: Json
           status: string
+          submitted_at: string | null
+          template_id: string | null
           updated_at: string
         }
         Insert: {
@@ -421,7 +510,10 @@ export type Database = {
           id?: string
           organization_id: string
           patient_id: string
+          responses?: Json
           status?: string
+          submitted_at?: string | null
+          template_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -433,7 +525,10 @@ export type Database = {
           id?: string
           organization_id?: string
           patient_id?: string
+          responses?: Json
           status?: string
+          submitted_at?: string | null
+          template_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -449,6 +544,13 @@ export type Database = {
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_forms_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "form_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -823,6 +925,30 @@ export type Database = {
       is_org_admin: {
         Args: { _organization_id: string; _user_id: string }
         Returns: boolean
+      }
+      submit_patient_form: {
+        Args: { _form_id: string; _responses: Json }
+        Returns: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_at: string | null
+          form_name: string
+          id: string
+          organization_id: string
+          patient_id: string
+          responses: Json
+          status: string
+          submitted_at: string | null
+          template_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "patient_forms"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
