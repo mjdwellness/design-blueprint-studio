@@ -1,5 +1,8 @@
 {
   "name": "tanstack_start_ts",
+  "version": "1.0.0",
+  "description": "MJD Wellness secure desktop application",
+  "author": "MJD Wellness and Community Center Inc",
   "productName": "MJD Wellness",
   "main": "electron/main.cjs",
   "private": true,
