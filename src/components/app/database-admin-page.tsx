@@ -24,7 +24,9 @@ export function DatabaseAdminPage({ kind }: { kind: Kind }) {
   const config=kind==="users"?null:configs[kind];
   const mutation=useMutation({mutationFn:async(values:Record<string,string>)=>{
     if(!config) throw new Error("User account creation is deferred. Existing user profiles are managed here after they sign in.");
-    const payload=config.payload(values); const query=editing?.id?(supabase.from(config.table) as any).update(payload).eq("id",editing.id):(supabase.from(config.table) as any).insert(payload); const {error}=await query; if(error) throw error;
+    const payload=config.payload(values); const query=editing?.id?(supabase.from(config.table) as any).update(payload).eq("id",editing.id):(supabase.from(config.table) as any).insert(payload).select("id").single(); const {data:saved,error}=await query; if(error) throw error;
+    const {data:{user}}=await supabase.auth.getUser();
+    if(user){await supabase.from("audit_logs").insert({actor_id:user.id,organization_id:(payload["organization_id"] as string|undefined)??(kind==="organizations"?(editing?.id??saved?.id):null),action:editing?"update":"create",entity_type:config.table,entity_id:editing?.id??saved?.id??null,metadata:{source:"admin_portal"}})}
   },onSuccess:async()=>{toast.success("Record saved");setOpen(false);setEditing(null);await queryClient.invalidateQueries({queryKey:["admin",kind]});},onError:(e)=>toast.error(e.message)});
   const rows=useMemo(()=>data as any[],[data]);
   const title=config?.title??"Users"; const subtitle=config?.subtitle??"Signed-in accounts, assigned roles, and organization membership.";
