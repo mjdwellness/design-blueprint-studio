@@ -41,6 +41,7 @@ import { Route as AdminTelecomRouteImport } from './routes/admin/telecom'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
+import { Route as ApiPublicBootstrapMjdRouteImport } from './routes/api/public/bootstrap-mjd'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -202,6 +203,11 @@ const SettingsRolesRoute = SettingsRolesRouteImport.update({
   path: '/settings/roles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBootstrapMjdRoute = ApiPublicBootstrapMjdRouteImport.update({
+  id: '/api/public/bootstrap-mjd',
+  path: '/api/public/bootstrap-mjd',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/api/public/bootstrap-mjd': typeof ApiPublicBootstrapMjdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByTo {
   '/settings/roles': typeof SettingsRolesRoute
   '/admin': typeof AdminIndexRoute
   '/settings': typeof SettingsIndexRoute
+  '/api/public/bootstrap-mjd': typeof ApiPublicBootstrapMjdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -305,6 +313,7 @@ export interface FileRoutesById {
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/api/public/bootstrap-mjd': typeof ApiPublicBootstrapMjdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -341,6 +350,7 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/admin/'
     | '/settings/'
+    | '/api/public/bootstrap-mjd'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -375,6 +385,7 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/admin'
     | '/settings'
+    | '/api/public/bootstrap-mjd'
   id:
     | '__root__'
     | '/'
@@ -409,6 +420,7 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/admin/'
     | '/settings/'
+    | '/api/public/bootstrap-mjd'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -444,6 +456,7 @@ export interface RootRouteChildren {
   SettingsRolesRoute: typeof SettingsRolesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
+  ApiPublicBootstrapMjdRoute: typeof ApiPublicBootstrapMjdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -672,6 +685,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRolesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/bootstrap-mjd': {
+      id: '/api/public/bootstrap-mjd'
+      path: '/api/public/bootstrap-mjd'
+      fullPath: '/api/public/bootstrap-mjd'
+      preLoaderRoute: typeof ApiPublicBootstrapMjdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -708,6 +728,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRolesRoute: SettingsRolesRoute,
   AdminIndexRoute: AdminIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
+  ApiPublicBootstrapMjdRoute: ApiPublicBootstrapMjdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
