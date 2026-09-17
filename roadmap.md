@@ -10,7 +10,7 @@
 - [x] Replace admin dashboard and management pages with editable database records
 - [x] Create the real MJD Wellness and Community Center Inc tenant, North Miami location, and first invited staff/patient accounts
 - [x] Verify permissions, persistence, key workflows, and responsive layouts
-- [ ] Add patient-scoped forms and payment records with secure access policies
-- [ ] Seed Marie's appointments, forms, and payments and show them in her portal
-- [ ] Add live patient, appointment, payment, and staff-hour metrics to the admin dashboard
-- [ ] Verify patient isolation, admin totals, and responsive portal/dashboard layouts
+- [x] Add patient-scoped forms and payment records with secure access policies
+- [x] Seed Marie's appointments, forms, and payments and show them in her portal
+- [x] Add live patient, appointment, payment, and staff-hour metrics to the admin dashboard
+- [x] Verify patient isolation, admin totals, and responsive portal/dashboard layouts
