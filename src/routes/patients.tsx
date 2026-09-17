@@ -7,12 +7,14 @@ import {
   Filter,
   Mail,
   MessageSquare,
+  MoreVertical,
   Phone,
   UserPlus,
   Users,
 } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
 import { Initials, PageHeader, Panel, Pill, StatCard } from "@/components/app/kit";
+import marieJeanProfile from "@/assets/marie-jean-profile.jpg";
 
 export const Route = createFileRoute("/patients")({
   head: () => ({
@@ -70,8 +72,8 @@ function PatientsPage() {
         <StatCard icon={<CalendarDays className="size-5" />} tone="purple" value="18" label="Scheduled today" />
       </div>
 
-      <div className="mt-4 grid min-h-[calc(100vh-12rem)] overflow-hidden rounded-md border border-border xl:grid-cols-[minmax(550px,1.55fr)_minmax(360px,1fr)]">
-        <Panel title="Patient Directory" bodyClassName="p-0" className="rounded-none border-0 xl:border-r">
+      <div className="mt-4 grid min-h-[calc(100vh-12rem)] overflow-hidden rounded-md border border-border min-[900px]:grid-cols-[minmax(500px,1.55fr)_minmax(320px,1fr)]">
+        <Panel title="Patient Directory" bodyClassName="p-0" className="rounded-none border-0 min-[900px]:border-r">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -116,29 +118,47 @@ function PatientsPage() {
           </div>
         </Panel>
 
-        <Panel bodyClassName="p-0" className="rounded-none border-0">
-          <div className="border-b border-border p-4">
-            <div className="flex items-center gap-3">
-              <Initials name={selected.name} className="size-11 text-sm" />
-              <div>
-                <div className="text-base font-semibold text-foreground">{selected.name}</div>
-                <div className="text-xs text-muted-foreground">
-                  {selected.id} · DOB {selected.dob}
-                </div>
-              </div>
+        <Panel bodyClassName="p-0" className="rounded-none border-0 bg-background">
+          <div className="relative border-b border-border px-5 pb-5 pt-4 text-center">
+            <div className="absolute right-4 top-4 flex items-center gap-1">
+              <button aria-label="Call patient" title="Call patient" className="flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                <Phone className="size-4" />
+              </button>
+              <button aria-label="More patient actions" title="More patient actions" className="flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                <MoreVertical className="size-4" />
+              </button>
             </div>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              <button className="inline-flex items-center gap-1.5 rounded bg-primary px-2.5 py-1.5 text-[11px] font-medium text-primary-foreground">
-                <Phone className="size-4" /> Call
+
+            <div className="relative mx-auto mt-3 w-fit">
+              {selected.id === "PT-001284" ? (
+                <img
+                  src={marieJeanProfile}
+                  alt="Marie Jean"
+                  width={816}
+                  height={816}
+                  className="size-24 rounded-full border-2 border-border object-cover"
+                />
+              ) : (
+                <Initials name={selected.name} className="size-24 border-2 border-border text-xl" />
+              )}
+              <span className="absolute bottom-1 right-1 size-4 rounded-full border-[3px] border-background bg-success" aria-label="Active patient" />
+            </div>
+
+            <h2 className="mt-3 text-xl font-semibold text-foreground">{selected.name}</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">{selected.id} · DOB {selected.dob}</p>
+            <p className="mx-auto mt-3 max-w-[270px] text-xs leading-5 text-muted-foreground">
+              Patient of {selected.provider} · Next visit {selected.next}
+            </p>
+
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <button className="inline-flex h-8 items-center gap-1.5 rounded border border-border bg-surface px-3 text-[11px] font-medium text-foreground hover:bg-muted">
+                <MessageSquare className="size-3.5" /> Text
               </button>
-              <button className="inline-flex items-center gap-1.5 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted">
-                <MessageSquare className="size-4" /> Text
+              <button className="inline-flex h-8 items-center gap-1.5 rounded border border-border bg-surface px-3 text-[11px] font-medium text-foreground hover:bg-muted">
+                <Mail className="size-3.5" /> Email
               </button>
-              <button className="inline-flex items-center gap-1.5 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted">
-                <Mail className="size-4" /> Email
-              </button>
-              <button className="inline-flex items-center gap-1.5 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium hover:bg-muted">
-                <ExternalLink className="size-4" /> Open in EHR
+              <button className="inline-flex h-8 items-center gap-1.5 rounded border border-border bg-surface px-3 text-[11px] font-medium text-foreground hover:bg-muted">
+                <ExternalLink className="size-3.5" /> Open in EHR
               </button>
             </div>
           </div>
