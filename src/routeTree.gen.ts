@@ -17,8 +17,10 @@ import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as PhoneSettingsRouteImport } from './routes/phone-settings'
+import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as TimeLaborRouteImport } from './routes/time-labor'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
 
@@ -62,6 +64,11 @@ const PhoneSettingsRoute = PhoneSettingsRouteImport.update({
   path: '/phone-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
@@ -70,6 +77,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimeLaborRoute = TimeLaborRouteImport.update({
+  id: '/time-labor',
+  path: '/time-labor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
@@ -92,8 +104,10 @@ export interface FileRoutesByFullPath {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
+  '/time-labor': typeof TimeLaborRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/settings/': typeof SettingsIndexRoute
 }
@@ -106,8 +120,10 @@ export interface FileRoutesByTo {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
+  '/time-labor': typeof TimeLaborRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/settings': typeof SettingsIndexRoute
 }
@@ -121,8 +137,10 @@ export interface FileRoutesById {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
+  '/time-labor': typeof TimeLaborRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/settings/': typeof SettingsIndexRoute
 }
@@ -137,8 +155,10 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/reviews'
     | '/schedule'
     | '/team'
+    | '/time-labor'
     | '/settings/roles'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -151,8 +171,10 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/reviews'
     | '/schedule'
     | '/team'
+    | '/time-labor'
     | '/settings/roles'
     | '/settings'
   id:
@@ -165,8 +187,10 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/reviews'
     | '/schedule'
     | '/team'
+    | '/time-labor'
     | '/settings/roles'
     | '/settings/'
   fileRoutesById: FileRoutesById
@@ -180,8 +204,10 @@ export interface RootRouteChildren {
   PatientsRoute: typeof PatientsRoute
   PaymentsRoute: typeof PaymentsRoute
   PhoneSettingsRoute: typeof PhoneSettingsRoute
+  ReviewsRoute: typeof ReviewsRoute
   ScheduleRoute: typeof ScheduleRoute
   TeamRoute: typeof TeamRoute
+  TimeLaborRoute: typeof TimeLaborRoute
   SettingsRolesRoute: typeof SettingsRolesRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
@@ -244,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PhoneSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedule': {
       id: '/schedule'
       path: '/schedule'
@@ -256,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/time-labor': {
+      id: '/time-labor'
+      path: '/time-labor'
+      fullPath: '/time-labor'
+      preLoaderRoute: typeof TimeLaborRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings/': {
@@ -284,8 +324,10 @@ const rootRouteChildren: RootRouteChildren = {
   PatientsRoute: PatientsRoute,
   PaymentsRoute: PaymentsRoute,
   PhoneSettingsRoute: PhoneSettingsRoute,
+  ReviewsRoute: ReviewsRoute,
   ScheduleRoute: ScheduleRoute,
   TeamRoute: TeamRoute,
+  TimeLaborRoute: TimeLaborRoute,
   SettingsRolesRoute: SettingsRolesRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
