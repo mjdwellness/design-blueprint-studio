@@ -20,6 +20,7 @@ import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as PhoneSettingsRouteImport } from './routes/phone-settings'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ScheduleRouteImport } from './routes/schedule'
@@ -94,6 +95,11 @@ const PaymentsRoute = PaymentsRouteImport.update({
 const PhoneSettingsRoute = PhoneSettingsRouteImport.update({
   id: '/phone-settings',
   path: '/phone-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -209,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/portal': typeof PortalRoute
   '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
@@ -242,6 +249,7 @@ export interface FileRoutesByTo {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/portal': typeof PortalRoute
   '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
@@ -276,6 +284,7 @@ export interface FileRoutesById {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/portal': typeof PortalRoute
   '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
@@ -311,6 +320,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/portal'
     | '/reset-password'
     | '/reviews'
     | '/schedule'
@@ -344,6 +354,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/portal'
     | '/reset-password'
     | '/reviews'
     | '/schedule'
@@ -377,6 +388,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/portal'
     | '/reset-password'
     | '/reviews'
     | '/schedule'
@@ -411,6 +423,7 @@ export interface RootRouteChildren {
   PatientsRoute: typeof PatientsRoute
   PaymentsRoute: typeof PaymentsRoute
   PhoneSettingsRoute: typeof PhoneSettingsRoute
+  PortalRoute: typeof PortalRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ReviewsRoute: typeof ReviewsRoute
   ScheduleRoute: typeof ScheduleRoute
@@ -510,6 +523,13 @@ declare module '@tanstack/react-router' {
       path: '/phone-settings'
       fullPath: '/phone-settings'
       preLoaderRoute: typeof PhoneSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -667,6 +687,7 @@ const rootRouteChildren: RootRouteChildren = {
   PatientsRoute: PatientsRoute,
   PaymentsRoute: PaymentsRoute,
   PhoneSettingsRoute: PhoneSettingsRoute,
+  PortalRoute: PortalRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ReviewsRoute: ReviewsRoute,
   ScheduleRoute: ScheduleRoute,
