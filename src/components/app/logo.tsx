@@ -8,16 +8,17 @@ export function LeafMark({ className = "h-8 w-8" }: { className?: string }) {
       />
       <path
         d="M40 10s-14-3-22 4c-6 5.3-6 14 0 18 2 1.3 4 2 4 2s-1-9 4-14 14-10 14-10z"
-        fill="#e6f1ff"
+        fill="currentColor"
+        opacity="0.28"
       />
       <path
         d="M39 9c-1 7-5 13-11 16-3 1.5-6 2-6 2s2-8 7-12 10-6 10-6z"
-        fill="#1d6ef5"
+        fill="currentColor"
       />
-      <path d="M13 34c2-8 7-14 14-18" stroke="#1d6ef5" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M13 34c2-8 7-14 14-18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
       <path
         d="M14 30c-3 3-4 7-3 10 3 .5 6-.7 8-3.4"
-        fill="#3aa0ff"
+        fill="currentColor"
       />
     </svg>
   );
