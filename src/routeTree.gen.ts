@@ -25,9 +25,13 @@ import { Route as TeamRouteImport } from './routes/team'
 import { Route as TimeLaborRouteImport } from './routes/time-labor'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
+import { Route as AdminAuditRouteImport } from './routes/admin/audit'
+import { Route as AdminFeaturesRouteImport } from './routes/admin/features'
+import { Route as AdminHealthRouteImport } from './routes/admin/health'
 import { Route as AdminIntegrationsRouteImport } from './routes/admin/integrations'
 import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminOrganizationsRouteImport } from './routes/admin/organizations'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminSubscriptionsRouteImport } from './routes/admin/subscriptions'
 import { Route as AdminSupportRouteImport } from './routes/admin/support'
 import { Route as AdminTelecomRouteImport } from './routes/admin/telecom'
@@ -115,6 +119,21 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   path: '/admin/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/admin/audit',
+  path: '/admin/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminFeaturesRoute = AdminFeaturesRouteImport.update({
+  id: '/admin/features',
+  path: '/admin/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminHealthRoute = AdminHealthRouteImport.update({
+  id: '/admin/health',
+  path: '/admin/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIntegrationsRoute = AdminIntegrationsRouteImport.update({
   id: '/admin/integrations',
   path: '/admin/integrations',
@@ -128,6 +147,11 @@ const AdminLocationsRoute = AdminLocationsRouteImport.update({
 const AdminOrganizationsRoute = AdminOrganizationsRouteImport.update({
   id: '/admin/organizations',
   path: '/admin/organizations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/admin/settings',
+  path: '/admin/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSubscriptionsRoute = AdminSubscriptionsRouteImport.update({
@@ -177,9 +201,13 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/features': typeof AdminFeaturesRoute
+  '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/organizations': typeof AdminOrganizationsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscriptions': typeof AdminSubscriptionsRoute
   '/admin/support': typeof AdminSupportRoute
   '/admin/telecom': typeof AdminTelecomRoute
@@ -204,9 +232,13 @@ export interface FileRoutesByTo {
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/features': typeof AdminFeaturesRoute
+  '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/organizations': typeof AdminOrganizationsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscriptions': typeof AdminSubscriptionsRoute
   '/admin/support': typeof AdminSupportRoute
   '/admin/telecom': typeof AdminTelecomRoute
@@ -232,9 +264,13 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/features': typeof AdminFeaturesRoute
+  '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/organizations': typeof AdminOrganizationsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscriptions': typeof AdminSubscriptionsRoute
   '/admin/support': typeof AdminSupportRoute
   '/admin/telecom': typeof AdminTelecomRoute
@@ -261,9 +297,13 @@ export interface FileRouteTypes {
     | '/team'
     | '/time-labor'
     | '/admin/analytics'
+    | '/admin/audit'
+    | '/admin/features'
+    | '/admin/health'
     | '/admin/integrations'
     | '/admin/locations'
     | '/admin/organizations'
+    | '/admin/settings'
     | '/admin/subscriptions'
     | '/admin/support'
     | '/admin/telecom'
@@ -288,9 +328,13 @@ export interface FileRouteTypes {
     | '/team'
     | '/time-labor'
     | '/admin/analytics'
+    | '/admin/audit'
+    | '/admin/features'
+    | '/admin/health'
     | '/admin/integrations'
     | '/admin/locations'
     | '/admin/organizations'
+    | '/admin/settings'
     | '/admin/subscriptions'
     | '/admin/support'
     | '/admin/telecom'
@@ -315,9 +359,13 @@ export interface FileRouteTypes {
     | '/team'
     | '/time-labor'
     | '/admin/analytics'
+    | '/admin/audit'
+    | '/admin/features'
+    | '/admin/health'
     | '/admin/integrations'
     | '/admin/locations'
     | '/admin/organizations'
+    | '/admin/settings'
     | '/admin/subscriptions'
     | '/admin/support'
     | '/admin/telecom'
@@ -343,9 +391,13 @@ export interface RootRouteChildren {
   TeamRoute: typeof TeamRoute
   TimeLaborRoute: typeof TimeLaborRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminAuditRoute: typeof AdminAuditRoute
+  AdminFeaturesRoute: typeof AdminFeaturesRoute
+  AdminHealthRoute: typeof AdminHealthRoute
   AdminIntegrationsRoute: typeof AdminIntegrationsRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
   AdminOrganizationsRoute: typeof AdminOrganizationsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSubscriptionsRoute: typeof AdminSubscriptionsRoute
   AdminSupportRoute: typeof AdminSupportRoute
   AdminTelecomRoute: typeof AdminTelecomRoute
@@ -469,6 +521,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/admin/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/features': {
+      id: '/admin/features'
+      path: '/admin/features'
+      fullPath: '/admin/features'
+      preLoaderRoute: typeof AdminFeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/health': {
+      id: '/admin/health'
+      path: '/admin/health'
+      fullPath: '/admin/health'
+      preLoaderRoute: typeof AdminHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/integrations': {
       id: '/admin/integrations'
       path: '/admin/integrations'
@@ -488,6 +561,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/organizations'
       fullPath: '/admin/organizations'
       preLoaderRoute: typeof AdminOrganizationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/subscriptions': {
@@ -551,9 +631,13 @@ const rootRouteChildren: RootRouteChildren = {
   TeamRoute: TeamRoute,
   TimeLaborRoute: TimeLaborRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminAuditRoute: AdminAuditRoute,
+  AdminFeaturesRoute: AdminFeaturesRoute,
+  AdminHealthRoute: AdminHealthRoute,
   AdminIntegrationsRoute: AdminIntegrationsRoute,
   AdminLocationsRoute: AdminLocationsRoute,
   AdminOrganizationsRoute: AdminOrganizationsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminSubscriptionsRoute: AdminSubscriptionsRoute,
   AdminSupportRoute: AdminSupportRoute,
   AdminTelecomRoute: AdminTelecomRoute,

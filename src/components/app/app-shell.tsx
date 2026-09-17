@@ -204,4 +204,3 @@ export function AppShell({
   );
 }
 
-export { Inbox };
