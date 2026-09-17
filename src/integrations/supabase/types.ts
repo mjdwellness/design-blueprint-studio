@@ -630,6 +630,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bootstrap_current_account: {
+        Args: { _display_name: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       has_org_access: {
         Args: { _organization_id: string; _user_id: string }
         Returns: boolean
