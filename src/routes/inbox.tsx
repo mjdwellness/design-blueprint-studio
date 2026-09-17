@@ -39,7 +39,7 @@ const messages = [
 
 function InboxPage() {
   const [active, setActive] = useState(0);
-  const thread = threads[active];
+  const thread = threads[active]!;
 
   return (
     <AppShell searchPlaceholder="Search conversations...">

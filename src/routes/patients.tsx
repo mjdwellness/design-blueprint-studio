@@ -43,7 +43,7 @@ const patients = [
 const tabs = ["Overview", "Appointments", "Forms", "Messages", "Payments"];
 
 function PatientsPage() {
-  const [selected, setSelected] = useState(patients[0]);
+  const [selected, setSelected] = useState(patients[0]!);
   const [tab, setTab] = useState("Overview");
 
   return (
