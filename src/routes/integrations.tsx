@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Activity, Calendar, CreditCard, HeartPulse, MessageSquare, Plug, Printer, Video } from "lucide-react";
+import { Activity, Calendar, CreditCard, ExternalLink, HeartPulse, MessageSquare, Plug, Printer, ShieldCheck, Video } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
 import { Dot, PageHeader, Panel, Pill } from "@/components/app/kit";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/integrations")({
   head: () => ({
@@ -21,12 +22,12 @@ export const Route = createFileRoute("/integrations")({
 });
 
 const integrations = [
-  { name: "Practice Fusion", desc: "Clinical system of record. Patients, appointments and documents sync one way.", icon: HeartPulse, tone: "green", status: "Connected", pill: "green" as const, meta: "Last sync 4 minutes ago" },
-  { name: "Telnyx", desc: "Voice and SMS for practice phone numbers, routing and messaging.", icon: MessageSquare, tone: "blue", status: "Connected", pill: "green" as const, meta: "3 numbers active" },
-  { name: "Stripe", desc: "Card payments, payment links and refunds. Cards are tokenized by Stripe.", icon: CreditCard, tone: "purple", status: "Connected", pill: "green" as const, meta: "Payouts daily" },
-  { name: "Google Calendar", desc: "Two-way sync of provider availability and appointments.", icon: Calendar, tone: "orange", status: "Action needed", pill: "orange" as const, meta: "Re-authorize access" },
-  { name: "Fax Provider", desc: "Inbound and outbound fax via provider abstraction layer.", icon: Printer, tone: "gray", status: "Not connected", pill: "gray" as const, meta: "Pending healthcare review" },
-  { name: "Telehealth", desc: "Video visits launched from the schedule and patient portal.", icon: Video, tone: "gray", status: "Not connected", pill: "gray" as const, meta: "Available in a later phase" },
+  { name: "Practice Fusion", desc: "Clinical system of record for charting, prescriptions, demographics and appointments.", icon: HeartPulse, tone: "orange", status: "Setup required", pill: "orange" as const, meta: "Secure access not connected", action: "Open EHR" },
+  { name: "Telnyx", desc: "Voice and SMS for practice phone numbers, routing and messaging.", icon: MessageSquare, tone: "blue", status: "Connected", pill: "green" as const, meta: "3 numbers active", action: "Manage" },
+  { name: "Stripe", desc: "Card payments, payment links and refunds. Cards are tokenized by Stripe.", icon: CreditCard, tone: "purple", status: "Connected", pill: "green" as const, meta: "Payouts daily", action: "Manage" },
+  { name: "Google Calendar", desc: "Two-way sync of provider availability and appointments.", icon: Calendar, tone: "orange", status: "Action needed", pill: "orange" as const, meta: "Re-authorize access", action: "Manage" },
+  { name: "Fax Provider", desc: "Inbound and outbound fax via provider abstraction layer.", icon: Printer, tone: "gray", status: "Not connected", pill: "gray" as const, meta: "Pending healthcare review", action: "Connect" },
+  { name: "Telehealth", desc: "Video visits launched from the schedule and patient portal.", icon: Video, tone: "gray", status: "Not connected", pill: "gray" as const, meta: "Available in a later phase", action: "Connect" },
 ];
 
 const iconTone: Record<string, string> = {
@@ -38,7 +39,7 @@ const iconTone: Record<string, string> = {
 };
 
 const events = [
-  { text: "Practice Fusion · 128 appointments synced", time: "4 min ago", tone: "green" as const },
+  { text: "Practice Fusion · Secure connection awaiting setup", time: "Not connected", tone: "orange" as const },
   { text: "Telnyx · Inbound SMS webhook delivered", time: "9 min ago", tone: "green" as const },
   { text: "Google Calendar · Token expired", time: "2 hrs ago", tone: "orange" as const },
   { text: "Stripe · Payout $2,140.00 initiated", time: "Yesterday", tone: "green" as const },
@@ -51,9 +52,9 @@ function IntegrationsPage() {
         title="Integrations"
         subtitle="Connect the services your practice already uses. Practice Fusion stays the clinical system of record."
         actions={
-          <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+          <Button size="sm">
             <Plug className="size-4" /> Browse directory
-          </button>
+          </Button>
         }
       />
 
@@ -76,15 +77,15 @@ function IntegrationsPage() {
               </div>
               <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
                 <span className="text-xs text-muted-foreground">{i.meta}</span>
-                <button
-                  className={`rounded-xl px-3 py-1.5 text-xs font-medium ${
-                    i.pill === "gray"
-                      ? "bg-primary text-primary-foreground"
-                      : "border border-border text-foreground hover:bg-muted"
-                  }`}
+                <Button
+                  size="sm"
+                  variant={i.pill === "gray" ? "default" : "outline"}
+                  onClick={() => {
+                    if (i.name === "Practice Fusion") window.open("https://www.practicefusion.com/", "_blank", "noopener,noreferrer");
+                  }}
                 >
-                  {i.pill === "gray" ? "Connect" : "Manage"}
-                </button>
+                  {i.action}{i.name === "Practice Fusion" ? <ExternalLink className="size-3.5" /> : null}
+                </Button>
               </div>
             </div>
           );
@@ -107,11 +108,11 @@ function IntegrationsPage() {
         <Panel title="Practice Fusion" action={<Activity className="size-4 text-muted-foreground" />}>
           <dl className="space-y-3 text-sm">
             {[
-              ["Connection", "Healthy"],
-              ["Direction", "Read from EHR, write-back disabled"],
-              ["Records in scope", "Demographics, appointments, documents"],
-              ["Last full sync", "Today, 6:00 AM"],
-              ["Next scheduled sync", "Today, 12:00 PM"],
+              ["Connection", "Setup required"],
+              ["Planned direction", "Read from EHR; write-back disabled"],
+              ["Planned scope", "Demographics, appointments, documents"],
+              ["Security", "Minimum-necessary access"],
+              ["Clinical record", "Remains in Practice Fusion"],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between gap-4 border-b border-border pb-3 last:border-0">
                 <dt className="text-muted-foreground">{k}</dt>
@@ -119,9 +120,10 @@ function IntegrationsPage() {
               </div>
             ))}
           </dl>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Charting, prescribing and clinical notes remain in Practice Fusion. Staff open the chart with “Open in EHR”.
-          </p>
+          <div className="mt-4 flex gap-3 border-t border-border pt-4">
+            <ShieldCheck className="mt-0.5 size-4 shrink-0 text-success" />
+            <p className="text-xs text-muted-foreground">Charting, prescribing and clinical notes remain in Practice Fusion. Authorized staff use “Open EHR” until secure data access is approved and connected.</p>
+          </div>
         </Panel>
       </div>
     </AppShell>

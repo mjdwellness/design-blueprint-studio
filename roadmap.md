@@ -24,3 +24,6 @@
 - [x] Add a weekly staff calendar for appointments, form deadlines, and staff hours
 - [x] Add Windows and macOS desktop packaging with a safe offline experience
 - [x] Verify the new workflows and desktop artifacts
+
+- [ ] Add an honest Practice Fusion setup and launch experience to Integrations
+- [ ] Verify administrator sign-in routing and integration screen behavior
