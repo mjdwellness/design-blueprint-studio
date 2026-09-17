@@ -78,7 +78,7 @@ const categories: { name: string; perms: { label: string; on: boolean }[] }[] = 
 ];
 
 function RolesPage() {
-  const [selected, setSelected] = useState(roles[3]);
+  const [selected, setSelected] = useState(roles[3]!);
 
   return (
     <AppShell searchPlaceholder="Search roles and permissions...">

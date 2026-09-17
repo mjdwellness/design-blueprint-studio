@@ -111,13 +111,13 @@ export function StatCard({
   children,
 }: {
   icon: ReactNode;
-  tone?: Tone;
+  tone?: Tone | undefined;
   value: string;
   label: string;
-  sub?: string;
-  delta?: string;
-  deltaTone?: Tone;
-  children?: ReactNode;
+  sub?: string | undefined;
+  delta?: string | undefined;
+  deltaTone?: Tone | undefined;
+  children?: ReactNode | undefined;
 }) {
   const iconBg = {
     blue: "bg-info-soft text-primary",
