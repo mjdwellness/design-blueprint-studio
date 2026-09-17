@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CallsRouteImport } from './routes/calls'
+import { Route as FormsRouteImport } from './routes/forms'
+import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as IntegrationsRouteImport } from './routes/integrations'
+import { Route as PatientsRouteImport } from './routes/patients'
+import { Route as PaymentsRouteImport } from './routes/payments'
+import { Route as PhoneSettingsRouteImport } from './routes/phone-settings'
+import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CallsRoute = CallsRouteImport.update({
+  id: '/calls',
+  path: '/calls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormsRoute = FormsRouteImport.update({
+  id: '/forms',
+  path: '/forms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InboxRoute = InboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegrationsRoute = IntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientsRoute = PatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsRoute = PaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhoneSettingsRoute = PhoneSettingsRouteImport.update({
+  id: '/phone-settings',
+  path: '/phone-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleRoute = ScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRolesRoute = SettingsRolesRouteImport.update({
+  id: '/settings/roles',
+  path: '/settings/roles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calls': typeof CallsRoute
+  '/forms': typeof FormsRoute
+  '/inbox': typeof InboxRoute
+  '/integrations': typeof IntegrationsRoute
+  '/patients': typeof PatientsRoute
+  '/payments': typeof PaymentsRoute
+  '/phone-settings': typeof PhoneSettingsRoute
+  '/schedule': typeof ScheduleRoute
+  '/team': typeof TeamRoute
+  '/settings/roles': typeof SettingsRolesRoute
+  '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calls': typeof CallsRoute
+  '/forms': typeof FormsRoute
+  '/inbox': typeof InboxRoute
+  '/integrations': typeof IntegrationsRoute
+  '/patients': typeof PatientsRoute
+  '/payments': typeof PaymentsRoute
+  '/phone-settings': typeof PhoneSettingsRoute
+  '/schedule': typeof ScheduleRoute
+  '/team': typeof TeamRoute
+  '/settings/roles': typeof SettingsRolesRoute
+  '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/calls': typeof CallsRoute
+  '/forms': typeof FormsRoute
+  '/inbox': typeof InboxRoute
+  '/integrations': typeof IntegrationsRoute
+  '/patients': typeof PatientsRoute
+  '/payments': typeof PaymentsRoute
+  '/phone-settings': typeof PhoneSettingsRoute
+  '/schedule': typeof ScheduleRoute
+  '/team': typeof TeamRoute
+  '/settings/roles': typeof SettingsRolesRoute
+  '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/calls'
+    | '/forms'
+    | '/inbox'
+    | '/integrations'
+    | '/patients'
+    | '/payments'
+    | '/phone-settings'
+    | '/schedule'
+    | '/team'
+    | '/settings/roles'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/calls'
+    | '/forms'
+    | '/inbox'
+    | '/integrations'
+    | '/patients'
+    | '/payments'
+    | '/phone-settings'
+    | '/schedule'
+    | '/team'
+    | '/settings/roles'
+    | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/calls'
+    | '/forms'
+    | '/inbox'
+    | '/integrations'
+    | '/patients'
+    | '/payments'
+    | '/phone-settings'
+    | '/schedule'
+    | '/team'
+    | '/settings/roles'
+    | '/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CallsRoute: typeof CallsRoute
+  FormsRoute: typeof FormsRoute
+  InboxRoute: typeof InboxRoute
+  IntegrationsRoute: typeof IntegrationsRoute
+  PatientsRoute: typeof PatientsRoute
+  PaymentsRoute: typeof PaymentsRoute
+  PhoneSettingsRoute: typeof PhoneSettingsRoute
+  ScheduleRoute: typeof ScheduleRoute
+  TeamRoute: typeof TeamRoute
+  SettingsRolesRoute: typeof SettingsRolesRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +195,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/calls': {
+      id: '/calls'
+      path: '/calls'
+      fullPath: '/calls'
+      preLoaderRoute: typeof CallsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forms': {
+      id: '/forms'
+      path: '/forms'
+      fullPath: '/forms'
+      preLoaderRoute: typeof FormsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inbox': {
+      id: '/inbox'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integrations': {
+      id: '/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof IntegrationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patients': {
+      id: '/patients'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof PatientsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments': {
+      id: '/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof PaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/phone-settings': {
+      id: '/phone-settings'
+      path: '/phone-settings'
+      fullPath: '/phone-settings'
+      preLoaderRoute: typeof PhoneSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/roles': {
+      id: '/settings/roles'
+      path: '/settings/roles'
+      fullPath: '/settings/roles'
+      preLoaderRoute: typeof SettingsRolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CallsRoute: CallsRoute,
+  FormsRoute: FormsRoute,
+  InboxRoute: InboxRoute,
+  IntegrationsRoute: IntegrationsRoute,
+  PatientsRoute: PatientsRoute,
+  PaymentsRoute: PaymentsRoute,
+  PhoneSettingsRoute: PhoneSettingsRoute,
+  ScheduleRoute: ScheduleRoute,
+  TeamRoute: TeamRoute,
+  SettingsRolesRoute: SettingsRolesRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
