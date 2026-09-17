@@ -57,6 +57,13 @@
       "when": 1789688290465,
       "tag": "0007_add_secure_available_appointment_slots",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1789689459339,
+      "tag": "0008_add_organization_general_settings",
+      "breakpoints": true
     }
   ]
 }

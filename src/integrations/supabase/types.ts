@@ -498,31 +498,49 @@ export type Database = {
       }
       organizations: {
         Row: {
+          address: string | null
           created_at: string
+          email: string | null
           id: string
           name: string
+          phone: string | null
+          practice_size: string | null
           slug: string
           specialty: string
           status: Database["public"]["Enums"]["record_status"]
+          timezone: string
           updated_at: string
+          website: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string
+          email?: string | null
           id?: string
           name: string
+          phone?: string | null
+          practice_size?: string | null
           slug: string
           specialty?: string
           status?: Database["public"]["Enums"]["record_status"]
+          timezone?: string
           updated_at?: string
+          website?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string
+          email?: string | null
           id?: string
           name?: string
+          phone?: string | null
+          practice_size?: string | null
           slug?: string
           specialty?: string
           status?: Database["public"]["Enums"]["record_status"]
+          timezone?: string
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
