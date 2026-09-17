@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CallsRouteImport } from './routes/calls'
 import { Route as FaxRouteImport } from './routes/fax'
 import { Route as FormsRouteImport } from './routes/forms'
@@ -19,6 +20,7 @@ import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as PhoneSettingsRouteImport } from './routes/phone-settings'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as TeamRouteImport } from './routes/team'
@@ -47,6 +49,11 @@ const IndexRoute = IndexRouteImport.update({
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CallsRoute = CallsRouteImport.update({
@@ -87,6 +94,11 @@ const PaymentsRoute = PaymentsRouteImport.update({
 const PhoneSettingsRoute = PhoneSettingsRouteImport.update({
   id: '/phone-settings',
   path: '/phone-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewsRoute = ReviewsRouteImport.update({
@@ -188,6 +200,7 @@ const SettingsRolesRoute = SettingsRolesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/auth': typeof AuthRoute
   '/calls': typeof CallsRoute
   '/fax': typeof FaxRoute
   '/forms': typeof FormsRoute
@@ -196,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/auth': typeof AuthRoute
   '/calls': typeof CallsRoute
   '/fax': typeof FaxRoute
   '/forms': typeof FormsRoute
@@ -227,6 +242,7 @@ export interface FileRoutesByTo {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
@@ -251,6 +267,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/auth': typeof AuthRoute
   '/calls': typeof CallsRoute
   '/fax': typeof FaxRoute
   '/forms': typeof FormsRoute
@@ -259,6 +276,7 @@ export interface FileRoutesById {
   '/patients': typeof PatientsRoute
   '/payments': typeof PaymentsRoute
   '/phone-settings': typeof PhoneSettingsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
@@ -284,6 +302,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analytics'
+    | '/auth'
     | '/calls'
     | '/fax'
     | '/forms'
@@ -292,6 +311,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/reset-password'
     | '/reviews'
     | '/schedule'
     | '/team'
@@ -315,6 +335,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/analytics'
+    | '/auth'
     | '/calls'
     | '/fax'
     | '/forms'
@@ -323,6 +344,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/reset-password'
     | '/reviews'
     | '/schedule'
     | '/team'
@@ -346,6 +368,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/analytics'
+    | '/auth'
     | '/calls'
     | '/fax'
     | '/forms'
@@ -354,6 +377,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/payments'
     | '/phone-settings'
+    | '/reset-password'
     | '/reviews'
     | '/schedule'
     | '/team'
@@ -378,6 +402,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  AuthRoute: typeof AuthRoute
   CallsRoute: typeof CallsRoute
   FaxRoute: typeof FaxRoute
   FormsRoute: typeof FormsRoute
@@ -386,6 +411,7 @@ export interface RootRouteChildren {
   PatientsRoute: typeof PatientsRoute
   PaymentsRoute: typeof PaymentsRoute
   PhoneSettingsRoute: typeof PhoneSettingsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ReviewsRoute: typeof ReviewsRoute
   ScheduleRoute: typeof ScheduleRoute
   TeamRoute: typeof TeamRoute
@@ -421,6 +447,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calls': {
@@ -477,6 +510,13 @@ declare module '@tanstack/react-router' {
       path: '/phone-settings'
       fullPath: '/phone-settings'
       preLoaderRoute: typeof PhoneSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reviews': {
@@ -618,6 +658,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
+  AuthRoute: AuthRoute,
   CallsRoute: CallsRoute,
   FaxRoute: FaxRoute,
   FormsRoute: FormsRoute,
@@ -626,6 +667,7 @@ const rootRouteChildren: RootRouteChildren = {
   PatientsRoute: PatientsRoute,
   PaymentsRoute: PaymentsRoute,
   PhoneSettingsRoute: PhoneSettingsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ReviewsRoute: ReviewsRoute,
   ScheduleRoute: ScheduleRoute,
   TeamRoute: TeamRoute,

@@ -27,9 +27,12 @@ import {
   Timer,
   Users,
   Users2,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LeafMark } from "./logo";
+import { Button } from "@/components/ui/button";
+import { useAccount } from "@/lib/auth";
 
 type NavItem = {
   label: string;
@@ -124,6 +127,8 @@ export function AppShell({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = variant === "admin";
   const railItems = (isAdmin ? adminPrimary : staffPrimary).slice(0, 7);
+  const account = useAccount();
+  const initials = account.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -212,17 +217,17 @@ export function AppShell({
             </button>
             <div className="flex items-center gap-2">
               <span className="flex size-7 items-center justify-center rounded-full bg-info-soft text-[10px] font-semibold text-primary">
-                {isAdmin ? "SA" : "AA"}
+                {initials || "AC"}
               </span>
               <span className="hidden leading-tight sm:block">
                 <span className="block text-xs font-medium text-foreground">
-                  {isAdmin ? "Super Admin" : "Alex Admin"}
+                  {account.displayName}
                 </span>
                 <span className="block text-[9px] text-muted-foreground">
-                  {isAdmin ? "Platform Administrator" : "MJD Wellness"}
+                  {account.role === "super_admin" ? "Platform Administrator" : account.role === "patient" ? "Patient account" : "MJD Wellness"}
                 </span>
               </span>
-              <ChevronDown className="size-4 text-muted-foreground" />
+              <Button variant="ghost" size="icon" onClick={() => void account.signOut()} aria-label="Sign out" title="Sign out" className="size-8"><LogOut className="size-4" /></Button>
             </div>
           </div>
         </header>

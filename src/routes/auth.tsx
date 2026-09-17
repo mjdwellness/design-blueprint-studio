@@ -20,10 +20,9 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"sign-in" | "sign-up" | "forgot">("sign-in");
+  const [mode, setMode] = useState<"sign-in" | "forgot">("sign-in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -33,9 +32,6 @@ function AuthPage() {
     if (mode === "forgot") {
       const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
       setMessage(error?.message ?? "Check your email for the password reset link.");
-    } else if (mode === "sign-up") {
-      const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { display_name: name }, emailRedirectTo: window.location.origin } });
-      setMessage(error?.message ?? (data.session ? "Account created." : "Check your email to confirm your account."));
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setMessage(error.message); else await navigate({ to: "/", replace: true });
@@ -46,17 +42,15 @@ function AuthPage() {
   return <main className="flex min-h-screen items-center justify-center bg-background px-4">
     <section className="w-full max-w-sm border border-border bg-surface p-7 shadow-2xl">
       <div className="mb-7 flex items-center gap-3"><span className="flex size-10 items-center justify-center rounded bg-primary text-primary-foreground"><LeafMark className="size-6" /></span><div><h1 className="text-xl font-semibold">MJD Wellness</h1><p className="text-xs text-muted-foreground">Secure practice workspace</p></div></div>
-      <h2 className="text-lg font-semibold">{mode === "sign-in" ? "Sign in" : mode === "sign-up" ? "Create account" : "Reset password"}</h2>
+      <h2 className="text-lg font-semibold">{mode === "sign-in" ? "Sign in" : "Reset password"}</h2>
       <p className="mt-1 text-xs text-muted-foreground">Use your authorized practice or patient account.</p>
       <form className="mt-6 space-y-4" onSubmit={submit}>
-        {mode === "sign-up" ? <div className="space-y-1.5"><Label htmlFor="name">Full name</Label><Input id="name" value={name} onChange={(e) => setName(e.target.value)} required /></div> : null}
         <div className="space-y-1.5"><Label htmlFor="email">Email</Label><Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
         {mode !== "forgot" ? <div className="space-y-1.5"><Label htmlFor="password">Password</Label><Input id="password" type="password" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} required /></div> : null}
         {message ? <p className="rounded border border-border bg-muted p-3 text-xs text-foreground">{message}</p> : null}
-        <Button className="w-full" disabled={busy}>{busy ? "Please wait…" : mode === "sign-in" ? "Sign in" : mode === "sign-up" ? "Create account" : "Send reset link"}</Button>
+        <Button className="w-full" disabled={busy}>{busy ? "Please wait…" : mode === "sign-in" ? "Sign in" : "Send reset link"}</Button>
       </form>
-      <div className="mt-5 flex justify-between text-xs">
-        <button className="text-primary" onClick={() => setMode(mode === "sign-up" ? "sign-in" : "sign-up")}>{mode === "sign-up" ? "Back to sign in" : "Create account"}</button>
+      <div className="mt-5 flex justify-end text-xs">
         <button className="text-muted-foreground" onClick={() => setMode(mode === "forgot" ? "sign-in" : "forgot")}>{mode === "forgot" ? "Back" : "Forgot password?"}</button>
       </div>
     </section>
