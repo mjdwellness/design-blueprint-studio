@@ -100,8 +100,8 @@ function AdminDashboard() {
         <Panel title="Platform Growth">
           <div className="flex h-56 items-end gap-4">
             {growth.map((g) => (
-              <div key={g.m} className="flex flex-1 flex-col items-center gap-2">
-                <div className="flex w-full flex-1 items-end">
+              <div key={g.m} className="flex h-full flex-1 flex-col justify-end items-center gap-2">
+                <div className="flex w-full flex-1 items-end pb-1">
                   <div className="w-full rounded-t-xl bg-primary/85" style={{ height: `${g.v}%` }} />
                 </div>
                 <span className="text-xs text-muted-foreground">{g.m}</span>

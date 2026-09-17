@@ -101,8 +101,8 @@ function PaymentsPage() {
           <Panel title="Collections this week">
             <div className="flex h-44 items-end gap-3">
               {bars.map((b) => (
-                <div key={b.d} className="flex flex-1 flex-col items-center gap-2">
-                  <div className="flex w-full flex-1 items-end">
+                <div key={b.d} className="flex h-full flex-1 flex-col justify-end items-center gap-2">
+                  <div className="flex w-full flex-1 items-end pb-1">
                     <div className="w-full rounded-t-lg bg-primary/85" style={{ height: `${b.v}%` }} />
                   </div>
                   <span className="text-xs text-muted-foreground">{b.d}</span>

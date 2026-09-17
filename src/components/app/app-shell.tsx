@@ -131,7 +131,7 @@ export function AppShell({
           <LeafMark className="size-9" />
           <span className="leading-tight">
             <span className="block text-[17px] font-bold text-white">MJD Wellness</span>
-            <span className="block text-[10px] text-sidebar-foreground/70">
+            <span className="block whitespace-nowrap text-[9px] text-sidebar-foreground/70">
               Care Today, Healthier Tomorrow.
             </span>
           </span>
