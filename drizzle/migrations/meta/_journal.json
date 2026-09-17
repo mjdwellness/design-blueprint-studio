@@ -36,6 +36,13 @@
       "when": 1789687883597,
       "tag": "0004_add_reusable_patient_form_workflow",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789687942706,
+      "tag": "0005_allow_patients_to_view_assigned_form_templates",
+      "breakpoints": true
     }
   ]
 }
