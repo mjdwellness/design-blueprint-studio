@@ -14,7 +14,7 @@
 - [x] Seed Marie's appointments, forms, and payments and show them in her portal
 - [x] Add live patient, appointment, payment, and staff-hour metrics to the admin dashboard
 - [x] Verify patient isolation, admin totals, and responsive portal/dashboard layouts
-- [ ] Add reusable form templates and configurable fields for staff
-- [ ] Let staff assign forms to patients and track live status
-- [ ] Let patients fill and securely submit assigned forms in the portal
-- [ ] Verify form creation, assignment, submission, and responsive layouts
+- [x] Add reusable form templates and configurable fields for staff
+- [x] Let staff assign forms to patients and track live status
+- [x] Let patients fill and securely submit assigned forms in the portal
+- [x] Verify form creation, assignment, submission, and responsive layouts
