@@ -5,6 +5,7 @@ import { CalendarCheck2, Clock3, DollarSign, Receipt, UserRoundCheck, Users } fr
 import { AppShell } from "@/components/app/app-shell";
 import { Initials, PageHeader, Panel, Pill, StatCard, type Tone } from "@/components/app/kit";
 import { getStaffDashboardMetrics } from "@/lib/platform-data";
+import { WeeklyCalendar } from "@/components/app/weekly-calendar";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [
@@ -25,6 +26,7 @@ function Dashboard() {
   const appointments = data?.appointments ?? [];
   const payments = data?.payments ?? [];
   const timeEntries = data?.hours ?? [];
+  const forms = data?.forms ?? [];
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const tomorrow = new Date(todayStart); tomorrow.setDate(tomorrow.getDate() + 1);
@@ -40,6 +42,7 @@ function Dashboard() {
     <PageHeader title="Staff Dashboard" subtitle="Live MJD Wellness activity across patients, care, collections, and labor." actions={<Link to="/admin/users" className="rounded bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground">Manage staff</Link>}/>
     {isLoading ? <p className="py-12 text-sm text-muted-foreground">Loading practice metrics…</p> : <>
       <div className="grid overflow-hidden rounded-md border border-border sm:grid-cols-2 xl:grid-cols-4"><StatCard icon={<Users/>} value={String(patients.length)} label="Active patients" tone="blue"/><StatCard icon={<CalendarCheck2/>} value={String(todayAppointments.length)} label="Appointments today" tone="purple" sub={`${appointments.length} total scheduled`}/><StatCard icon={<DollarSign/>} value={money(collected)} label="Payments collected" tone="green" sub={`${money(outstanding)} outstanding`}/><StatCard icon={<Clock3/>} value={`${hours.toFixed(1)}h`} label="Staff hours this week" tone="orange" sub={`${timeEntries.length} approved entries`}/></div>
+      <WeeklyCalendar appointments={appointments} forms={forms} hours={timeEntries}/>
       <div className="mt-4 grid gap-4 xl:grid-cols-[1.35fr_0.65fr]">
         <Panel title="Upcoming appointments" bodyClassName="p-0"><div className="overflow-x-auto"><table className="w-full min-w-[620px] text-sm"><thead><tr className="border-b border-border text-left text-[11px] text-muted-foreground"><th className="px-4 py-3 font-medium">Patient</th><th className="font-medium">Date & time</th><th className="font-medium">Visit</th><th className="font-medium">Provider</th><th className="font-medium">Status</th></tr></thead><tbody>{appointments.filter((item) => new Date(item.starts_at) >= todayStart).slice(0, 6).map((item) => { const patient = Array.isArray(item.patients) ? item.patients[0] : item.patients; const name = patient ? `${patient.first_name} ${patient.last_name}` : "Unassigned"; return <tr key={item.id} className="border-b border-border last:border-0"><td className="px-4 py-3"><span className="flex items-center gap-3"><Initials name={name}/><b>{name}</b></span></td><td className="text-muted-foreground">{new Date(item.starts_at).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}</td><td className="text-muted-foreground">{item.appointment_type}</td><td className="text-muted-foreground">{item.provider_name}</td><td><Pill tone={toneFor(item.status)}>{item.status.replace("_", " ")}</Pill></td></tr>; })}</tbody></table></div></Panel>
         <Panel title="Payment overview"><div className="space-y-4"><Metric label="Collected" value={money(collected)} icon={<DollarSign className="size-4"/>}/><Metric label="Outstanding" value={money(outstanding)} icon={<Receipt className="size-4"/>}/><Metric label="Transactions" value={String(payments.length)} icon={<UserRoundCheck className="size-4"/>}/></div><div className="mt-5 border-t border-border pt-4"><div className="flex items-center justify-between text-xs text-muted-foreground"><span>Collection rate</span><b className="text-foreground">{collected + outstanding ? Math.round(collected / (collected + outstanding) * 100) : 0}%</b></div><div className="mt-2 h-1.5 overflow-hidden rounded bg-muted"><div className="h-full bg-primary" style={{ width: `${collected + outstanding ? Math.round(collected / (collected + outstanding) * 100) : 0}%` }}/></div></div></Panel>

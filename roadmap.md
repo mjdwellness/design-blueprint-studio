@@ -18,3 +18,9 @@
 - [x] Let staff assign forms to patients and track live status
 - [x] Let patients fill and securely submit assigned forms in the portal
 - [x] Verify form creation, assignment, submission, and responsive layouts
+
+- [x] Add multiple real MJD Wellness form templates with useful configurable fields
+- [x] Let Marie request and book appointments while preserving patient-only access
+- [x] Add a weekly staff calendar for appointments, form deadlines, and staff hours
+- [x] Add Windows and macOS desktop packaging with a safe offline experience
+- [x] Verify the new workflows and desktop artifacts
