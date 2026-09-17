@@ -40,12 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ]);
       if (!mounted) return;
       const names = roles?.map((item) => item.role) ?? [];
-      const nextRole = names.includes("super_admin") ? "super_admin" : names[0] ?? localStorage.getItem("mjd-account-role");
-      const nextName = profile?.display_name ?? localStorage.getItem("mjd-account-name") ?? fallback;
+      const nextRole = names.includes("super_admin") ? "super_admin" : names[0] ?? null;
+      const nextName = profile?.display_name ?? fallback;
       setRole(nextRole);
       setDisplayName(nextName);
-      if (nextRole) localStorage.setItem("mjd-account-role", nextRole);
-      localStorage.setItem("mjd-account-name", nextName);
       setLoading(false);
     };
     void supabase.auth.getSession().then(({ data }) => loadAccount(data.session));
@@ -72,8 +70,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     displayName,
     signOut: async () => {
       await supabase.auth.signOut();
-      localStorage.removeItem("mjd-account-role");
-      localStorage.removeItem("mjd-account-name");
       await navigate({ to: "/auth", replace: true });
     },
   }), [displayName, loading, navigate, role, session]);
