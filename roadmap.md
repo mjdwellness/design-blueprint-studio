@@ -8,5 +8,5 @@
 - [x] Add secure email/password authentication and role-based staff, patient, and super-admin access
 - [x] Replace staff Inbox, Calls, Patients, and Schedule sample data with editable database records
 - [x] Replace admin dashboard and management pages with editable database records
-- [ ] Create the real MJD Wellness and Community Center Inc tenant, North Miami location, and first invited staff/patient accounts
+- [x] Create the real MJD Wellness and Community Center Inc tenant, North Miami location, and first invited staff/patient accounts
 - [ ] Verify permissions, persistence, key workflows, and responsive layouts
