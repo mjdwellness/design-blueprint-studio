@@ -15,6 +15,13 @@
       "when": 1789686528295,
       "tag": "0001_add_account_bootstrap_and_admin_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789687512860,
+      "tag": "0002_add_patient_forms_payments_staff_hours",
+      "breakpoints": true
     }
   ]
 }
