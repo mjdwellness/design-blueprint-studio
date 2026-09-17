@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { AlertTriangle, Building2, Globe, Loader2, Palette, ShieldCheck, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app/app-shell";
@@ -51,10 +51,12 @@ const defaultGeneralSettings: GeneralSettings = {
 };
 
 function Field({ label, value, onChange, type = "text", required = false }: { label: string; value: string; onChange?: (value: string) => void; type?: string; required?: boolean }) {
+  const inputId = useId();
   return (
     <div>
-      <label className="text-xs font-medium text-muted-foreground">{label}</label>
+      <label htmlFor={inputId} className="text-xs font-medium text-muted-foreground">{label}</label>
       <input
+        id={inputId}
         type={type}
         value={value}
         required={required}
@@ -177,8 +179,8 @@ function SettingsPage() {
                 <Field label="Address" value={general.address} onChange={updateField("address")} />
               </div>
               <div>
-                <label className="text-xs font-medium text-muted-foreground">Timezone</label>
-                <select value={general.timezone} onChange={(event) => updateField("timezone")(event.target.value)} className="mt-1.5 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40">
+                <label htmlFor="organization-timezone" className="text-xs font-medium text-muted-foreground">Timezone</label>
+                <select id="organization-timezone" value={general.timezone} onChange={(event) => updateField("timezone")(event.target.value)} className="mt-1.5 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40">
                   <option value="America/New_York">Eastern Time</option>
                   <option value="America/Chicago">Central Time</option>
                   <option value="America/Denver">Mountain Time</option>
