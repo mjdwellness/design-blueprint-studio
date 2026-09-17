@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
+import { OfflineStatus } from "@/components/app/offline-status";
 
 function NotFoundComponent() {
   return (
@@ -130,10 +131,15 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) void navigator.serviceWorker.register("/sw.js");
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Outlet />
+        <OfflineStatus />
         <Toaster richColors />
       </AuthProvider>
     </QueryClientProvider>

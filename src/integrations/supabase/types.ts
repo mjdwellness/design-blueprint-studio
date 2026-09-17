@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointment_services: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          name: string
+          organization_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          name: string
+          organization_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          name?: string
+          organization_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_services_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_type: string
@@ -776,6 +817,60 @@ export type Database = {
         }
         Relationships: []
       }
+      provider_availability: {
+        Row: {
+          active: boolean
+          created_at: string
+          day_of_week: number
+          ends_at: string
+          id: string
+          location_id: string | null
+          organization_id: string
+          provider_name: string
+          slot_minutes: number
+          starts_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          day_of_week: number
+          ends_at: string
+          id?: string
+          location_id?: string | null
+          organization_id: string
+          provider_name: string
+          slot_minutes?: number
+          starts_at: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          day_of_week?: number
+          ends_at?: string
+          id?: string
+          location_id?: string | null
+          organization_id?: string
+          provider_name?: string
+          slot_minutes?: number
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_availability_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_availability_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       staff_time_entries: {
         Row: {
           break_minutes: number
@@ -907,9 +1002,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      book_patient_appointment: {
+        Args: {
+          _availability_id: string
+          _notes?: string
+          _service_id: string
+          _starts_at: string
+        }
+        Returns: string
+      }
       bootstrap_current_account: {
         Args: { _display_name: string }
         Returns: Database["public"]["Enums"]["app_role"]
+      }
+      get_available_appointment_slots: {
+        Args: { _days?: number; _from_date?: string; _service_id: string }
+        Returns: {
+          availability_id: string
+          ends_at: string
+          location_id: string
+          provider_name: string
+          starts_at: string
+        }[]
       }
       has_org_access: {
         Args: { _organization_id: string; _user_id: string }
