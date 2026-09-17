@@ -23,6 +23,7 @@ import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TimeLaborRouteImport } from './routes/time-labor'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
 
@@ -96,6 +97,11 @@ const TimeLaborRoute = TimeLaborRouteImport.update({
   path: '/time-labor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
   '/settings/roles': typeof SettingsRolesRoute
+  '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
   '/settings/roles': typeof SettingsRolesRoute
+  '/admin': typeof AdminIndexRoute
   '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
   '/settings/roles': typeof SettingsRolesRoute
+  '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/time-labor'
     | '/settings/roles'
+    | '/admin/'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/time-labor'
     | '/settings/roles'
+    | '/admin'
     | '/settings'
   id:
     | '__root__'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/time-labor'
     | '/settings/roles'
+    | '/admin/'
     | '/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   TeamRoute: typeof TeamRoute
   TimeLaborRoute: typeof TimeLaborRoute
   SettingsRolesRoute: typeof SettingsRolesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimeLaborRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings/': {
       id: '/settings/'
       path: '/settings'
@@ -371,6 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeamRoute: TeamRoute,
   TimeLaborRoute: TimeLaborRoute,
   SettingsRolesRoute: SettingsRolesRoute,
+  AdminIndexRoute: AdminIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
