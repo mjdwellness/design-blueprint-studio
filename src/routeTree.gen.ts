@@ -41,6 +41,7 @@ import { Route as AdminTelecomRouteImport } from './routes/admin/telecom'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
+import { Route as ApiPublicRepairMjdInvitesRouteImport } from './routes/api/public/repair-mjd-invites'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -202,6 +203,12 @@ const SettingsRolesRoute = SettingsRolesRouteImport.update({
   path: '/settings/roles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRepairMjdInvitesRoute =
+  ApiPublicRepairMjdInvitesRouteImport.update({
+    id: '/api/public/repair-mjd-invites',
+    path: '/api/public/repair-mjd-invites',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -236,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/api/public/repair-mjd-invites': typeof ApiPublicRepairMjdInvitesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -270,6 +278,7 @@ export interface FileRoutesByTo {
   '/settings/roles': typeof SettingsRolesRoute
   '/admin': typeof AdminIndexRoute
   '/settings': typeof SettingsIndexRoute
+  '/api/public/repair-mjd-invites': typeof ApiPublicRepairMjdInvitesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -305,6 +314,7 @@ export interface FileRoutesById {
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/api/public/repair-mjd-invites': typeof ApiPublicRepairMjdInvitesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -341,6 +351,7 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/admin/'
     | '/settings/'
+    | '/api/public/repair-mjd-invites'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/admin'
     | '/settings'
+    | '/api/public/repair-mjd-invites'
   id:
     | '__root__'
     | '/'
@@ -409,6 +421,7 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/admin/'
     | '/settings/'
+    | '/api/public/repair-mjd-invites'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -444,6 +457,7 @@ export interface RootRouteChildren {
   SettingsRolesRoute: typeof SettingsRolesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
+  ApiPublicRepairMjdInvitesRoute: typeof ApiPublicRepairMjdInvitesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -672,6 +686,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRolesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/repair-mjd-invites': {
+      id: '/api/public/repair-mjd-invites'
+      path: '/api/public/repair-mjd-invites'
+      fullPath: '/api/public/repair-mjd-invites'
+      preLoaderRoute: typeof ApiPublicRepairMjdInvitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -708,6 +729,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRolesRoute: SettingsRolesRoute,
   AdminIndexRoute: AdminIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
+  ApiPublicRepairMjdInvitesRoute: ApiPublicRepairMjdInvitesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
