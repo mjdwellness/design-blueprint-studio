@@ -110,7 +110,7 @@ export function StatCard({
   deltaTone = "green",
   children,
 }: {
-  icon: ReactNode;
+  icon?: ReactNode;
   tone?: Tone | undefined;
   value: string;
   label: string;
@@ -131,9 +131,7 @@ export function StatCard({
   return (
     <div className="border-r border-border bg-surface px-4 py-3 last:border-r-0">
       <div className="flex items-center gap-3">
-        <div className={cn("flex size-8 shrink-0 items-center justify-center rounded", iconBg)}>
-          {icon}
-        </div>
+        {icon ? <div className={cn("flex size-8 shrink-0 items-center justify-center rounded", iconBg)}>{icon}</div> : null}
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="text-lg font-semibold leading-tight text-foreground">{value}</div>
