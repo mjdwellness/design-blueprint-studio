@@ -25,5 +25,5 @@
 - [x] Add Windows and macOS desktop packaging with a safe offline experience
 - [x] Verify the new workflows and desktop artifacts
 
-- [ ] Add an honest Practice Fusion setup and launch experience to Integrations
-- [ ] Verify administrator sign-in routing and integration screen behavior
+- [x] Add an honest Practice Fusion setup and launch experience to Integrations
+- [x] Verify administrator sign-in routing and integration screen behavior
