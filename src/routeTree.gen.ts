@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as CallsRouteImport } from './routes/calls'
+import { Route as FaxRouteImport } from './routes/fax'
 import { Route as FormsRouteImport } from './routes/forms'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
@@ -29,9 +31,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CallsRoute = CallsRouteImport.update({
   id: '/calls',
   path: '/calls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaxRoute = FaxRouteImport.update({
+  id: '/fax',
+  path: '/fax',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FormsRoute = FormsRouteImport.update({
@@ -97,7 +109,9 @@ const SettingsRolesRoute = SettingsRolesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/calls': typeof CallsRoute
+  '/fax': typeof FaxRoute
   '/forms': typeof FormsRoute
   '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
@@ -113,7 +127,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/calls': typeof CallsRoute
+  '/fax': typeof FaxRoute
   '/forms': typeof FormsRoute
   '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
@@ -130,7 +146,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/calls': typeof CallsRoute
+  '/fax': typeof FaxRoute
   '/forms': typeof FormsRoute
   '/inbox': typeof InboxRoute
   '/integrations': typeof IntegrationsRoute
@@ -148,7 +166,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analytics'
     | '/calls'
+    | '/fax'
     | '/forms'
     | '/inbox'
     | '/integrations'
@@ -164,7 +184,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/analytics'
     | '/calls'
+    | '/fax'
     | '/forms'
     | '/inbox'
     | '/integrations'
@@ -180,7 +202,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/analytics'
     | '/calls'
+    | '/fax'
     | '/forms'
     | '/inbox'
     | '/integrations'
@@ -197,7 +221,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticsRoute: typeof AnalyticsRoute
   CallsRoute: typeof CallsRoute
+  FaxRoute: typeof FaxRoute
   FormsRoute: typeof FormsRoute
   InboxRoute: typeof InboxRoute
   IntegrationsRoute: typeof IntegrationsRoute
@@ -221,11 +247,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calls': {
       id: '/calls'
       path: '/calls'
       fullPath: '/calls'
       preLoaderRoute: typeof CallsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fax': {
+      id: '/fax'
+      path: '/fax'
+      fullPath: '/fax'
+      preLoaderRoute: typeof FaxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forms': {
@@ -317,7 +357,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticsRoute: AnalyticsRoute,
   CallsRoute: CallsRoute,
+  FaxRoute: FaxRoute,
   FormsRoute: FormsRoute,
   InboxRoute: InboxRoute,
   IntegrationsRoute: IntegrationsRoute,
