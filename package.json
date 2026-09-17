@@ -11,9 +11,11 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
-    ,"desktop:win": "electron-packager . 'MJD Wellness' --platform=win32 --arch=x64 --out=electron-release --overwrite --ignore='^/src' --ignore='^/drizzle' --ignore='^/supabase' --ignore='^/electron-release'"
-    ,"desktop:mac": "electron-packager . 'MJD Wellness' --platform=darwin --arch=arm64 --out=electron-release --overwrite --ignore='^/src' --ignore='^/drizzle' --ignore='^/supabase' --ignore='^/electron-release'"
+    "format": "prettier --write .",
+    "desktop:win": "electron-packager electron 'MJD Wellness' --platform=win32 --arch=x64 --out=electron-release --overwrite",
+    "desktop:mac": "electron-packager electron 'MJD Wellness' --platform=darwin --arch=arm64 --out=electron-release --overwrite",
+    "installer:win": "electron-builder --win nsis",
+    "installer:mac": "electron-builder --mac dmg"
   },
   "overrides": {
     "rolldown": "1.2.1"
@@ -96,5 +98,14 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5"
+  }
+  ,"build": {
+    "appId": "org.mjdwellness.desktop",
+    "productName": "MJD Wellness",
+    "files": ["electron/**/*"],
+    "directories": { "output": "desktop-installers" },
+    "win": { "target": "nsis", "artifactName": "MJD-Wellness-Setup-${version}.${ext}" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true },
+    "mac": { "target": "dmg", "category": "public.app-category.medical", "artifactName": "MJD-Wellness-${version}.${ext}" }
   }
 }

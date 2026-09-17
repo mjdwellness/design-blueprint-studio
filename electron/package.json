@@ -1,0 +1,8 @@
+{
+  "name": "mjd-wellness-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MJD Wellness secure desktop application",
+  "productName": "MJD Wellness",
+  "main": "main.cjs"
+}

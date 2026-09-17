@@ -1,0 +1,29 @@
+name: Desktop installers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run installer:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MJD-Wellness-Windows-Installer
+          path: desktop-installers/*.exe
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run installer:mac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MJD-Wellness-macOS-Installer
+          path: desktop-installers/*.dmg
