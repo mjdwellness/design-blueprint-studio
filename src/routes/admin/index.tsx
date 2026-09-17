@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import { CalendarCheck2, Clock3, DollarSign, Receipt, UserRoundCheck, Users } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
 import { Initials, PageHeader, Panel, Pill, StatCard, type Tone } from "@/components/app/kit";
@@ -48,4 +49,4 @@ function Dashboard() {
   </AppShell>;
 }
 
-function Metric({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) { return <div className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded bg-muted text-muted-foreground">{icon}</span><span className="flex-1 text-sm text-muted-foreground">{label}</span><b className="text-sm">{value}</b></div>; }
+function Metric({ label, value, icon }: { label: string; value: string; icon: ReactNode }) { return <div className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded bg-muted text-muted-foreground">{icon}</span><span className="flex-1 text-sm text-muted-foreground">{label}</span><b className="text-sm">{value}</b></div>; }

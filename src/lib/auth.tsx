@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isPublic = PUBLIC_PATHS.has(location.pathname);
     if (!session && !isPublic) void navigate({ to: "/auth", replace: true });
     if (session && location.pathname === "/auth") void navigate({ to: role === "patient" ? "/portal" : role === "super_admin" ? "/admin" : "/", replace: true });
-    if (session && location.pathname.startsWith("/admin") && role !== "super_admin") void navigate({ to: role === "patient" ? "/portal" : "/", replace: true });
+    if (session && location.pathname.startsWith("/admin") && role !== "super_admin" && role !== "org_admin") void navigate({ to: role === "patient" ? "/portal" : "/", replace: true });
     if (session && role === "patient" && !location.pathname.startsWith("/portal") && !isPublic) void navigate({ to: "/portal", replace: true });
   }, [loading, location.pathname, navigate, role, session]);
 
