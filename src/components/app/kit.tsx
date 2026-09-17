@@ -13,11 +13,11 @@ export function PageHeader({
   eyebrow?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+    <div className="mb-4 flex min-h-12 flex-wrap items-start justify-between gap-3 border-b border-border pb-4">
       <div>
-        {eyebrow ? <div className="mb-2 text-sm text-muted-foreground">{eyebrow}</div> : null}
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
-        {subtitle ? <p className="mt-1 text-muted-foreground">{subtitle}</p> : null}
+        {eyebrow ? <div className="mb-1 text-[11px] text-muted-foreground">{eyebrow}</div> : null}
+        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+        {subtitle ? <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </div>
@@ -40,17 +40,17 @@ export function Panel({
   return (
     <section
       className={cn(
-        "rounded-2xl border border-border bg-surface shadow-[0_1px_2px_rgba(16,24,40,0.05)]",
+        "overflow-hidden rounded-md border border-border bg-surface",
         className,
       )}
     >
       {title ? (
-        <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
-          <h2 className="text-base font-semibold text-foreground">{title}</h2>
+        <header className="flex h-11 items-center justify-between gap-3 border-b border-border px-4">
+          <h2 className="text-sm font-medium text-foreground">{title}</h2>
           {action}
         </header>
       ) : null}
-      <div className={cn("p-5", bodyClassName)}>{children}</div>
+      <div className={cn("p-4", bodyClassName)}>{children}</div>
     </section>
   );
 }
@@ -78,7 +78,7 @@ export function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+        "inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-medium",
         toneMap[tone],
         className,
       )}
@@ -129,14 +129,14 @@ export function StatCard({
   }[tone];
 
   return (
-    <div className="rounded-2xl border border-border bg-surface p-5 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-      <div className="flex items-start gap-4">
-        <div className={cn("flex size-11 shrink-0 items-center justify-center rounded-full", iconBg)}>
+    <div className="border-r border-border bg-surface px-4 py-3 last:border-r-0">
+      <div className="flex items-center gap-3">
+        <div className={cn("flex size-8 shrink-0 items-center justify-center rounded", iconBg)}>
           {icon}
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            <div className="text-2xl font-bold leading-tight text-foreground">{value}</div>
+            <div className="text-lg font-semibold leading-tight text-foreground">{value}</div>
             {delta ? (
               <span
                 className={cn(
@@ -148,8 +148,8 @@ export function StatCard({
               </span>
             ) : null}
           </div>
-          <div className="text-sm font-medium text-foreground">{label}</div>
-          {sub ? <div className="mt-0.5 text-xs text-muted-foreground">{sub}</div> : null}
+          <div className="text-[11px] text-muted-foreground">{label}</div>
+          {sub ? <div className="mt-0.5 text-[10px] text-muted-foreground">{sub}</div> : null}
           {children}
         </div>
       </div>
