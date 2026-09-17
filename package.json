@@ -86,6 +86,7 @@
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
     "electron": "^44.4.1",
+    "electron-builder": "^26.15.3",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",
@@ -98,14 +99,26 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5"
-  }
-  ,"build": {
+  },
+  "build": {
     "appId": "org.mjdwellness.desktop",
     "productName": "MJD Wellness",
     "files": ["electron/**/*"],
-    "directories": { "output": "desktop-installers" },
-    "win": { "target": "nsis", "artifactName": "MJD-Wellness-Setup-${version}.${ext}" },
-    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true },
-    "mac": { "target": "dmg", "category": "public.app-category.medical", "artifactName": "MJD-Wellness-${version}.${ext}" }
+    "directories": {
+      "output": "desktop-installers"
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "MJD-Wellness-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.medical",
+      "artifactName": "MJD-Wellness-${version}.${ext}"
+    }
   }
 }
