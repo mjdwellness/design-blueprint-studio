@@ -24,9 +24,13 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TimeLaborRouteImport } from './routes/time-labor'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
+import { Route as AdminIntegrationsRouteImport } from './routes/admin/integrations'
 import { Route as AdminLocationsRouteImport } from './routes/admin/locations'
 import { Route as AdminOrganizationsRouteImport } from './routes/admin/organizations'
 import { Route as AdminSubscriptionsRouteImport } from './routes/admin/subscriptions'
+import { Route as AdminSupportRouteImport } from './routes/admin/support'
+import { Route as AdminTelecomRouteImport } from './routes/admin/telecom'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsRolesRouteImport } from './routes/settings/roles'
@@ -106,6 +110,16 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/admin/analytics',
+  path: '/admin/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIntegrationsRoute = AdminIntegrationsRouteImport.update({
+  id: '/admin/integrations',
+  path: '/admin/integrations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLocationsRoute = AdminLocationsRouteImport.update({
   id: '/admin/locations',
   path: '/admin/locations',
@@ -119,6 +133,16 @@ const AdminOrganizationsRoute = AdminOrganizationsRouteImport.update({
 const AdminSubscriptionsRoute = AdminSubscriptionsRouteImport.update({
   id: '/admin/subscriptions',
   path: '/admin/subscriptions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSupportRoute = AdminSupportRouteImport.update({
+  id: '/admin/support',
+  path: '/admin/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTelecomRoute = AdminTelecomRouteImport.update({
+  id: '/admin/telecom',
+  path: '/admin/telecom',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
@@ -152,9 +176,13 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/organizations': typeof AdminOrganizationsRoute
   '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/admin/support': typeof AdminSupportRoute
+  '/admin/telecom': typeof AdminTelecomRoute
   '/admin/users': typeof AdminUsersRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
@@ -175,9 +203,13 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/organizations': typeof AdminOrganizationsRoute
   '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/admin/support': typeof AdminSupportRoute
+  '/admin/telecom': typeof AdminTelecomRoute
   '/admin/users': typeof AdminUsersRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/admin': typeof AdminIndexRoute
@@ -199,9 +231,13 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/team': typeof TeamRoute
   '/time-labor': typeof TimeLaborRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/organizations': typeof AdminOrganizationsRoute
   '/admin/subscriptions': typeof AdminSubscriptionsRoute
+  '/admin/support': typeof AdminSupportRoute
+  '/admin/telecom': typeof AdminTelecomRoute
   '/admin/users': typeof AdminUsersRoute
   '/settings/roles': typeof SettingsRolesRoute
   '/admin/': typeof AdminIndexRoute
@@ -224,9 +260,13 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/team'
     | '/time-labor'
+    | '/admin/analytics'
+    | '/admin/integrations'
     | '/admin/locations'
     | '/admin/organizations'
     | '/admin/subscriptions'
+    | '/admin/support'
+    | '/admin/telecom'
     | '/admin/users'
     | '/settings/roles'
     | '/admin/'
@@ -247,9 +287,13 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/team'
     | '/time-labor'
+    | '/admin/analytics'
+    | '/admin/integrations'
     | '/admin/locations'
     | '/admin/organizations'
     | '/admin/subscriptions'
+    | '/admin/support'
+    | '/admin/telecom'
     | '/admin/users'
     | '/settings/roles'
     | '/admin'
@@ -270,9 +314,13 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/team'
     | '/time-labor'
+    | '/admin/analytics'
+    | '/admin/integrations'
     | '/admin/locations'
     | '/admin/organizations'
     | '/admin/subscriptions'
+    | '/admin/support'
+    | '/admin/telecom'
     | '/admin/users'
     | '/settings/roles'
     | '/admin/'
@@ -294,9 +342,13 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   TeamRoute: typeof TeamRoute
   TimeLaborRoute: typeof TimeLaborRoute
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminIntegrationsRoute: typeof AdminIntegrationsRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
   AdminOrganizationsRoute: typeof AdminOrganizationsRoute
   AdminSubscriptionsRoute: typeof AdminSubscriptionsRoute
+  AdminSupportRoute: typeof AdminSupportRoute
+  AdminTelecomRoute: typeof AdminTelecomRoute
   AdminUsersRoute: typeof AdminUsersRoute
   SettingsRolesRoute: typeof SettingsRolesRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -410,6 +462,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/integrations': {
+      id: '/admin/integrations'
+      path: '/admin/integrations'
+      fullPath: '/admin/integrations'
+      preLoaderRoute: typeof AdminIntegrationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/locations': {
       id: '/admin/locations'
       path: '/admin/locations'
@@ -429,6 +495,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/subscriptions'
       fullPath: '/admin/subscriptions'
       preLoaderRoute: typeof AdminSubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/support': {
+      id: '/admin/support'
+      path: '/admin/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AdminSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/telecom': {
+      id: '/admin/telecom'
+      path: '/admin/telecom'
+      fullPath: '/admin/telecom'
+      preLoaderRoute: typeof AdminTelecomRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/users': {
@@ -470,9 +550,13 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   TeamRoute: TeamRoute,
   TimeLaborRoute: TimeLaborRoute,
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminIntegrationsRoute: AdminIntegrationsRoute,
   AdminLocationsRoute: AdminLocationsRoute,
   AdminOrganizationsRoute: AdminOrganizationsRoute,
   AdminSubscriptionsRoute: AdminSubscriptionsRoute,
+  AdminSupportRoute: AdminSupportRoute,
+  AdminTelecomRoute: AdminTelecomRoute,
   AdminUsersRoute: AdminUsersRoute,
   SettingsRolesRoute: SettingsRolesRoute,
   AdminIndexRoute: AdminIndexRoute,
