@@ -14,16 +14,651 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          appointment_type: string
+          created_at: string
+          ends_at: string
+          id: string
+          location_id: string | null
+          notes: string | null
+          organization_id: string
+          patient_id: string | null
+          provider_id: string | null
+          provider_name: string
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_type: string
+          created_at?: string
+          ends_at: string
+          id?: string
+          location_id?: string | null
+          notes?: string | null
+          organization_id: string
+          patient_id?: string | null
+          provider_id?: string | null
+          provider_name: string
+          starts_at: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_type?: string
+          created_at?: string
+          ends_at?: string
+          id?: string
+          location_id?: string | null
+          notes?: string | null
+          organization_id?: string
+          patient_id?: string | null
+          provider_id?: string | null
+          provider_name?: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          metadata: Json
+          organization_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          metadata?: Json
+          organization_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          metadata?: Json
+          organization_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calls: {
+        Row: {
+          created_at: string
+          direction: string
+          duration_seconds: number
+          handled_by: string | null
+          id: string
+          notes: string | null
+          organization_id: string
+          patient_id: string | null
+          phone_number: string
+          recording_url: string | null
+          started_at: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          direction: string
+          duration_seconds?: number
+          handled_by?: string | null
+          id?: string
+          notes?: string | null
+          organization_id: string
+          patient_id?: string | null
+          phone_number: string
+          recording_url?: string | null
+          started_at?: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          direction?: string
+          duration_seconds?: number
+          handled_by?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string
+          patient_id?: string | null
+          phone_number?: string
+          recording_url?: string | null
+          started_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calls_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calls_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          channel: string
+          created_at: string
+          id: string
+          last_message_at: string
+          organization_id: string
+          patient_id: string | null
+          subject: string | null
+          unread_count: number
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          organization_id: string
+          patient_id?: string | null
+          subject?: string | null
+          unread_count?: number
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          organization_id?: string
+          patient_id?: string | null
+          subject?: string | null
+          unread_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      locations: {
+        Row: {
+          address_line1: string | null
+          city: string
+          created_at: string
+          id: string
+          name: string
+          organization_id: string
+          phone: string | null
+          postal_code: string | null
+          region: string
+          status: Database["public"]["Enums"]["record_status"]
+          updated_at: string
+        }
+        Insert: {
+          address_line1?: string | null
+          city: string
+          created_at?: string
+          id?: string
+          name: string
+          organization_id: string
+          phone?: string | null
+          postal_code?: string | null
+          region: string
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string | null
+          city?: string
+          created_at?: string
+          id?: string
+          name?: string
+          organization_id?: string
+          phone?: string | null
+          postal_code?: string | null
+          region?: string
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "locations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          id: string
+          read_at: string | null
+          sender_id: string | null
+          sender_type: string
+          sent_at: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string | null
+          sender_type: string
+          sent_at?: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string | null
+          sender_type?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_memberships: {
+        Row: {
+          created_at: string
+          id: string
+          location_id: string | null
+          organization_id: string
+          status: Database["public"]["Enums"]["record_status"]
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_id?: string | null
+          organization_id: string
+          status?: Database["public"]["Enums"]["record_status"]
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_id?: string | null
+          organization_id?: string
+          status?: Database["public"]["Enums"]["record_status"]
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_memberships_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_memberships_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          specialty: string
+          status: Database["public"]["Enums"]["record_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          specialty?: string
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          specialty?: string
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      patients: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          balance_cents: number
+          created_at: string
+          date_of_birth: string | null
+          ehr_reference: string | null
+          email: string | null
+          first_name: string
+          id: string
+          insurance: string | null
+          last_name: string
+          organization_id: string
+          patient_number: string
+          phone: string | null
+          profile_id: string | null
+          provider_name: string | null
+          status: Database["public"]["Enums"]["record_status"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          balance_cents?: number
+          created_at?: string
+          date_of_birth?: string | null
+          ehr_reference?: string | null
+          email?: string | null
+          first_name: string
+          id?: string
+          insurance?: string | null
+          last_name: string
+          organization_id: string
+          patient_number: string
+          phone?: string | null
+          profile_id?: string | null
+          provider_name?: string | null
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          balance_cents?: number
+          created_at?: string
+          date_of_birth?: string | null
+          ehr_reference?: string | null
+          email?: string | null
+          first_name?: string
+          id?: string
+          insurance?: string | null
+          last_name?: string
+          organization_id?: string
+          patient_number?: string
+          phone?: string | null
+          profile_id?: string | null
+          provider_name?: string | null
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patients_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      phone_numbers: {
+        Row: {
+          calls_30d: number
+          capabilities: string[]
+          created_at: string
+          id: string
+          location_id: string | null
+          organization_id: string
+          phone_number: string
+          sms_30d: number
+          status: Database["public"]["Enums"]["record_status"]
+          updated_at: string
+        }
+        Insert: {
+          calls_30d?: number
+          capabilities?: string[]
+          created_at?: string
+          id?: string
+          location_id?: string | null
+          organization_id: string
+          phone_number: string
+          sms_30d?: number
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Update: {
+          calls_30d?: number
+          capabilities?: string[]
+          created_at?: string
+          id?: string
+          location_id?: string | null
+          organization_id?: string
+          phone_number?: string
+          sms_30d?: number
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phone_numbers_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "phone_numbers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          email: string
+          id: string
+          last_active_at: string | null
+          phone: string | null
+          preferences: Json
+          status: Database["public"]["Enums"]["record_status"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name: string
+          email: string
+          id: string
+          last_active_at?: string | null
+          phone?: string | null
+          preferences?: Json
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          email?: string
+          id?: string
+          last_active_at?: string | null
+          phone?: string | null
+          preferences?: Json
+          status?: Database["public"]["Enums"]["record_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          id: string
+          monthly_amount_cents: number
+          organization_id: string
+          plan_name: string
+          renews_at: string | null
+          seats: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          monthly_amount_cents?: number
+          organization_id: string
+          plan_name: string
+          renews_at?: string | null
+          seats?: number
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          monthly_amount_cents?: number
+          organization_id?: string
+          plan_name?: string
+          renews_at?: string | null
+          seats?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      bootstrap_current_account: {
+        Args: { _display_name: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_org_access: {
+        Args: { _organization_id: string; _user_id: string }
+        Returns: boolean
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_org_admin: {
+        Args: { _organization_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "super_admin"
+        | "org_admin"
+        | "staff"
+        | "provider"
+        | "billing"
+        | "patient"
+      record_status: "active" | "inactive" | "pending" | "suspended" | "trial"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +785,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "super_admin",
+        "org_admin",
+        "staff",
+        "provider",
+        "billing",
+        "patient",
+      ],
+      record_status: ["active", "inactive", "pending", "suspended", "trial"],
+    },
   },
 } as const
