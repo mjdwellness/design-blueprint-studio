@@ -265,7 +265,7 @@ function SettingsPage() {
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <Field label="Primary color" value="#2563EB" />
               <Field label="Accent color" value="#10B981" />
-              <Field label="Email sender name" value="MJD Wellness" />
+              <Field label="Email sender name" value={account.organization?.name ?? general.name} />
               <Field label="Reply-to address" value="info@mjdwellness.com" />
             </div>
           </Panel>

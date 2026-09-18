@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Mail, ShieldCheck, UserPlus, Users2 } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
 import { Dot, Initials, PageHeader, Panel, Pill, StatCard } from "@/components/app/kit";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -32,11 +33,12 @@ const team = [
 ];
 
 function TeamPage() {
+  const account = useAccount();
   return (
     <AppShell searchPlaceholder="Search team members...">
       <PageHeader
         title="Team"
-        subtitle="People with access to MJD Wellness. Permissions come from their assigned role."
+        subtitle={`People with access to ${account.organization?.name ?? "this practice"}. Permissions come from their assigned role.`}
         actions={
           <>
             <Link
