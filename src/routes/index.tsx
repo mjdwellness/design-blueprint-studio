@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
 import { Dot, Initials, PageHeader, Panel, Pill, StatCard } from "@/components/app/kit";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,12 +61,14 @@ const tasks = [
 ];
 
 function HomePage() {
+  const account = useAccount();
+  const practiceName = account.organization?.name ?? "your practice";
   return (
     <AppShell>
       <PageHeader
         eyebrow="Wednesday, September 17, 2025"
         title="Good morning, Alex"
-        subtitle="Here's what's happening at MJD Wellness today."
+        subtitle={`Here's what's happening at ${practiceName} today.`}
         actions={
           <>
             <button className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted">

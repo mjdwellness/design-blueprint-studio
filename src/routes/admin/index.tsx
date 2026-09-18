@@ -6,6 +6,7 @@ import { AppShell } from "@/components/app/app-shell";
 import { Initials, PageHeader, Panel, Pill, StatCard, type Tone } from "@/components/app/kit";
 import { getStaffDashboardMetrics } from "@/lib/platform-data";
 import { WeeklyCalendar } from "@/components/app/weekly-calendar";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [
@@ -21,6 +22,8 @@ const money = (cents: number) => new Intl.NumberFormat("en-US", { style: "curren
 const toneFor = (status: string): Tone => status === "paid" || status === "completed" || status === "confirmed" || status === "approved" ? "green" : status === "failed" || status === "overdue" || status === "cancelled" ? "red" : "orange";
 
 function Dashboard() {
+  const account = useAccount();
+  const dashboardScope = account.role === "super_admin" ? "all organizations" : account.organization?.name ?? "your practice";
   const { data, isLoading } = useQuery({ queryKey: ["staff-dashboard-metrics"], queryFn: getStaffDashboardMetrics });
   const patients = data?.patients ?? [];
   const appointments = data?.appointments ?? [];
@@ -39,7 +42,7 @@ function Dashboard() {
     return sum + Math.max(0, (end - new Date(entry.clocked_in_at).getTime()) / 3600000 - entry.break_minutes / 60);
   }, 0);
   return <AppShell variant="admin">
-    <PageHeader title="Staff Dashboard" subtitle="Live MJD Wellness activity across patients, care, collections, and labor." actions={<Link to="/admin/users" className="rounded bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground">Manage staff</Link>}/>
+    <PageHeader title="Staff Dashboard" subtitle={`Live ${dashboardScope} activity across patients, care, collections, and labor.`} actions={<Link to="/admin/users" className="rounded bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground">Manage staff</Link>}/>
     {isLoading ? <p className="py-12 text-sm text-muted-foreground">Loading practice metrics…</p> : <>
       <div className="grid overflow-hidden rounded-md border border-border sm:grid-cols-2 xl:grid-cols-4"><StatCard icon={<Users/>} value={String(patients.length)} label="Active patients" tone="blue"/><StatCard icon={<CalendarCheck2/>} value={String(todayAppointments.length)} label="Appointments today" tone="purple" sub={`${appointments.length} total scheduled`}/><StatCard icon={<DollarSign/>} value={money(collected)} label="Payments collected" tone="green" sub={`${money(outstanding)} outstanding`}/><StatCard icon={<Clock3/>} value={`${hours.toFixed(1)}h`} label="Staff hours this week" tone="orange" sub={`${timeEntries.length} approved entries`}/></div>
       <WeeklyCalendar appointments={appointments} forms={forms} hours={timeEntries}/>
