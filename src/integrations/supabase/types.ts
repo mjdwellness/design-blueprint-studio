@@ -274,6 +274,56 @@ export type Database = {
           },
         ]
       }
+      ehr_connections: {
+        Row: {
+          created_at: string
+          external_practice_id: string | null
+          granted_scopes: string[]
+          id: string
+          last_sync_error: string | null
+          last_synced_at: string | null
+          organization_id: string
+          patients_synced: number
+          provider: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          external_practice_id?: string | null
+          granted_scopes?: string[]
+          id?: string
+          last_sync_error?: string | null
+          last_synced_at?: string | null
+          organization_id: string
+          patients_synced?: number
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          external_practice_id?: string | null
+          granted_scopes?: string[]
+          id?: string
+          last_sync_error?: string | null
+          last_synced_at?: string | null
+          organization_id?: string
+          patients_synced?: number
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ehr_connections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       form_fields: {
         Row: {
           created_at: string

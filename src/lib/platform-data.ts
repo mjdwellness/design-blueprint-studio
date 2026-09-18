@@ -1,5 +1,17 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export async function getEhrConnection(organizationId?: string, provider: string = "practice_fusion") {
+  if (!organizationId) return null;
+  const { data, error } = await supabase
+    .from("ehr_connections")
+    .select("*")
+    .eq("organization_id", organizationId)
+    .eq("provider", provider)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 export async function getPatients(organizationId?: string) {
   let query = supabase.from("patients").select("*").order("last_name");
   if (organizationId) query = query.eq("organization_id", organizationId);
