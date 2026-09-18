@@ -1,8 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { AlertTriangle, Building2, Globe, Palette, ShieldCheck, Upload } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useId, useState } from "react";
+import { AlertTriangle, Building2, Globe, Loader2, Palette, ShieldCheck, Upload } from "lucide-react";
+import { toast } from "sonner";
 import { AppShell } from "@/components/app/app-shell";
 import { PageHeader, Panel } from "@/components/app/kit";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { MJD_ORG_ID } from "@/lib/platform-data";
 
 export const Route = createFileRoute("/settings/")({
   head: () => ({
@@ -23,13 +28,40 @@ export const Route = createFileRoute("/settings/")({
 
 const tabs = ["General", "Branding", "Locations", "Notifications", "Security"];
 
-function Field({ label, value, type = "text" }: { label: string; value: string; type?: string }) {
+type GeneralSettings = {
+  name: string;
+  specialty: string;
+  phone: string;
+  email: string;
+  website: string;
+  practice_size: string;
+  address: string;
+  timezone: string;
+};
+
+const defaultGeneralSettings: GeneralSettings = {
+  name: "MJD Wellness and Community Center Inc",
+  specialty: "Primary Care",
+  phone: "",
+  email: "info@mjdwellness.org",
+  website: "",
+  practice_size: "5-10 providers",
+  address: "822 NE 125th St, North Miami, FL 33161",
+  timezone: "America/New_York",
+};
+
+function Field({ label, value, onChange, type = "text", required = false }: { label: string; value: string; onChange?: (value: string) => void; type?: string; required?: boolean }) {
+  const inputId = useId();
   return (
     <div>
-      <label className="text-xs font-medium text-muted-foreground">{label}</label>
+      <label htmlFor={inputId} className="text-xs font-medium text-muted-foreground">{label}</label>
       <input
+        id={inputId}
         type={type}
-        defaultValue={value}
+        value={value}
+        required={required}
+        onChange={(event) => onChange?.(event.target.value)}
+        readOnly={!onChange}
         className="mt-1.5 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40"
       />
     </div>
@@ -38,6 +70,70 @@ function Field({ label, value, type = "text" }: { label: string; value: string; 
 
 function SettingsPage() {
   const [tab, setTab] = useState("General");
+  const [general, setGeneral] = useState<GeneralSettings>(defaultGeneralSettings);
+  const queryClient = useQueryClient();
+  const { data: settingsData, isLoading } = useQuery({
+    queryKey: ["organization-settings", MJD_ORG_ID],
+    queryFn: async () => {
+      const [organizationResult, locationsResult, membersResult, subscriptionResult] = await Promise.all([
+        supabase.from("organizations").select("id,name,specialty,phone,email,website,practice_size,address,timezone,created_at").eq("id", MJD_ORG_ID).single(),
+        supabase.from("locations").select("id", { count: "exact", head: true }).eq("organization_id", MJD_ORG_ID),
+        supabase.from("organization_memberships").select("id", { count: "exact", head: true }).eq("organization_id", MJD_ORG_ID).eq("status", "active"),
+        supabase.from("subscriptions").select("plan_name").eq("organization_id", MJD_ORG_ID).maybeSingle(),
+      ]);
+      if (organizationResult.error) throw organizationResult.error;
+      return {
+        organization: organizationResult.data,
+        locationCount: locationsResult.count ?? 0,
+        memberCount: membersResult.count ?? 0,
+        plan: subscriptionResult.data?.plan_name ?? "Not configured",
+      };
+    },
+  });
+
+  useEffect(() => {
+    const organization = settingsData?.organization;
+    if (!organization) return;
+    setGeneral({
+      name: organization.name,
+      specialty: organization.specialty,
+      phone: organization.phone ?? defaultGeneralSettings.phone,
+      email: organization.email ?? defaultGeneralSettings.email,
+      website: organization.website ?? defaultGeneralSettings.website,
+      practice_size: organization.practice_size ?? defaultGeneralSettings.practice_size,
+      address: organization.address ?? defaultGeneralSettings.address,
+      timezone: organization.timezone ?? defaultGeneralSettings.timezone,
+    });
+  }, [settingsData]);
+
+  const updateField = (field: keyof GeneralSettings) => (value: string) => {
+    setGeneral((current) => ({ ...current, [field]: value }));
+  };
+
+  const saveGeneral = useMutation({
+    mutationFn: async () => {
+      const name = general.name.trim();
+      const specialty = general.specialty.trim();
+      if (!name || !specialty) throw new Error("Practice name and specialty are required.");
+      const { error } = await supabase.from("organizations").update({
+        name,
+        specialty,
+        phone: general.phone.trim() || null,
+        email: general.email.trim() || null,
+        website: general.website.trim() || null,
+        practice_size: general.practice_size.trim() || null,
+        address: general.address.trim() || null,
+        timezone: general.timezone,
+        updated_at: new Date().toISOString(),
+      }).eq("id", MJD_ORG_ID);
+      if (error) throw error;
+    },
+    onSuccess: async () => {
+      toast.success("Settings saved");
+      await queryClient.invalidateQueries({ queryKey: ["organization-settings", MJD_ORG_ID] });
+    },
+    onError: (error) => toast.error(error.message),
+  });
 
   return (
     <AppShell searchPlaceholder="Search settings...">
@@ -71,28 +167,31 @@ function SettingsPage() {
       {tab === "General" ? (
         <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
           <Panel title="Practice Information">
+            <form onSubmit={(event) => { event.preventDefault(); saveGeneral.mutate(); }}>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Practice name" value="MJD Wellness" />
-              <Field label="Specialty" value="Primary Care" />
-              <Field label="Phone" value="(908) 555-0142" />
-              <Field label="Email" value="info@mjdwellness.com" />
-              <Field label="Website" value="https://www.mjdwellness.com" />
-              <Field label="Practice size" value="5-10 providers" />
+              <Field label="Practice name" value={general.name} onChange={updateField("name")} required />
+              <Field label="Specialty" value={general.specialty} onChange={updateField("specialty")} required />
+              <Field label="Phone" value={general.phone} onChange={updateField("phone")} type="tel" />
+              <Field label="Email" value={general.email} onChange={updateField("email")} type="email" />
+              <Field label="Website" value={general.website} onChange={updateField("website")} type="url" />
+              <Field label="Practice size" value={general.practice_size} onChange={updateField("practice_size")} />
               <div className="sm:col-span-2">
-                <Field label="Address" value="123 Wellness Ave, Suite 200, Newark, NJ 07102" />
+                <Field label="Address" value={general.address} onChange={updateField("address")} />
               </div>
               <div>
-                <label className="text-xs font-medium text-muted-foreground">Timezone</label>
-                <select className="mt-1.5 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40">
-                  <option>Eastern Time (GMT-05:00)</option>
-                  <option>Central Time (GMT-06:00)</option>
-                  <option>Pacific Time (GMT-08:00)</option>
+                <label htmlFor="organization-timezone" className="text-xs font-medium text-muted-foreground">Timezone</label>
+                <select id="organization-timezone" value={general.timezone} onChange={(event) => updateField("timezone")(event.target.value)} className="mt-1.5 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:ring-2 focus:ring-ring/40">
+                  <option value="America/New_York">Eastern Time</option>
+                  <option value="America/Chicago">Central Time</option>
+                  <option value="America/Denver">Mountain Time</option>
+                  <option value="America/Los_Angeles">Pacific Time</option>
                 </select>
               </div>
             </div>
-            <button className="mt-6 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-              Save changes
-            </button>
+            <Button type="submit" className="mt-6" disabled={isLoading || saveGeneral.isPending}>
+              {saveGeneral.isPending ? <><Loader2 className="animate-spin" /> Saving…</> : "Save changes"}
+            </Button>
+            </form>
           </Panel>
 
           <div className="space-y-6">
@@ -100,10 +199,10 @@ function SettingsPage() {
               <dl className="space-y-3 text-sm">
                 {[
                   ["Organization ID", "ORG-001"],
-                  ["Plan", "Professional"],
-                  ["Locations", "2"],
-                  ["Team members", "24"],
-                  ["Created", "Jan 12, 2025"],
+                  ["Plan", settingsData?.plan ?? "—"],
+                  ["Locations", String(settingsData?.locationCount ?? 0)],
+                  ["Team members", String(settingsData?.memberCount ?? 0)],
+                  ["Created", settingsData?.organization.created_at ? new Date(settingsData.organization.created_at).toLocaleDateString() : "—"],
                 ].map(([k, v]) => (
                   <div key={k} className="flex justify-between gap-4 border-b border-border pb-3 last:border-0">
                     <dt className="text-muted-foreground">{k}</dt>
