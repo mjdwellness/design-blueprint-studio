@@ -1,192 +1,68 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  CalendarDays,
-  CheckCircle2,
-  CreditCard,
-  FileText,
-  MessageSquare,
-  Phone,
-  PhoneMissed,
-  Plus,
-  UserPlus,
-  Users,
-} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
+import { CalendarCheck2, Clock3, DollarSign, Receipt, UserRoundCheck, Users } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
-import { Dot, Initials, PageHeader, Panel, Pill, StatCard } from "@/components/app/kit";
+import { Initials, PageHeader, Panel, Pill, StatCard, type Tone } from "@/components/app/kit";
+import { getStaffDashboardMetrics } from "@/lib/platform-data";
+import { WeeklyCalendar } from "@/components/app/weekly-calendar";
 import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Home | MJD Wellness Practice Platform" },
-      {
-        name: "description",
-        content:
-          "Daily overview for MJD Wellness staff: calls, messages, appointments, forms and payments in one place.",
-      },
-      { property: "og:title", content: "Home | MJD Wellness Practice Platform" },
-      {
-        property: "og:description",
-        content: "Daily overview of calls, messages, appointments, forms and payments.",
-      },
+      { title: "Staff Dashboard | MJD Wellness" },
+      { name: "description", content: "Live patient, appointment, payment, and staff-hour metrics for your organization." },
+      { property: "og:title", content: "Staff Dashboard | MJD Wellness" },
+      { property: "og:description", content: "Live practice operations dashboard." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: HomePage,
+  component: Dashboard,
 });
 
-const appointments = [
-  { time: "9:00 AM", name: "Sarah Johnson", type: "Annual Physical", status: "Checked In", tone: "green" as const },
-  { time: "10:30 AM", name: "Marie Jean", type: "Follow-up Visit", status: "Confirmed", tone: "blue" as const },
-  { time: "11:15 AM", name: "Robert Chen", type: "New Patient", status: "Forms Pending", tone: "orange" as const },
-  { time: "1:00 PM", name: "Emily Davis", type: "Lab Review", status: "Confirmed", tone: "blue" as const },
-  { time: "2:30 PM", name: "Michael Brown", type: "Consultation", status: "Unconfirmed", tone: "gray" as const },
-];
+const money = (cents: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(cents / 100);
+const toneFor = (status: string): Tone => status === "paid" || status === "completed" || status === "confirmed" || status === "approved" ? "green" : status === "failed" || status === "overdue" || status === "cancelled" ? "red" : "orange";
 
-const activity = [
-  { icon: PhoneMissed, tone: "red" as const, title: "Missed call from Marie Jean", meta: "(908) 555-0142 · 6 min ago" },
-  { icon: MessageSquare, tone: "blue" as const, title: "New text from Robert Chen", meta: "“Running 10 minutes late” · 18 min ago" },
-  { icon: FileText, tone: "green" as const, title: "New Patient Intake submitted", meta: "Emily Davis · 42 min ago" },
-  { icon: CreditCard, tone: "purple" as const, title: "Payment received — $85.00", meta: "Sarah Johnson · 1 hr ago" },
-  { icon: CalendarDays, tone: "orange" as const, title: "Appointment rescheduled", meta: "Michael Brown → Sep 24 · 2 hrs ago" },
-];
-
-const tasks = [
-  { label: "Review 3 pending intake forms", due: "Due today", tone: "orange" as const },
-  { label: "Call back 2 missed patients", due: "Due today", tone: "red" as const },
-  { label: "Confirm tomorrow's 14 appointments", due: "Tomorrow", tone: "blue" as const },
-  { label: "Send statements for 5 balances", due: "This week", tone: "gray" as const },
-];
-
-function HomePage() {
+function Dashboard() {
   const account = useAccount();
-  const practiceName = account.organization?.name ?? "your practice";
-  return (
-    <AppShell>
-      <PageHeader
-        eyebrow="Wednesday, September 17, 2025"
-        title="Good morning, Alex"
-        subtitle={`Here's what's happening at ${practiceName} today.`}
-        actions={
-          <>
-            <button className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted">
-              <UserPlus className="size-4" /> New Patient
-            </button>
-            <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-              <Plus className="size-4" /> New Appointment
-            </button>
-          </>
-        }
-      />
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={<Phone className="size-5" />} tone="blue" value="38" label="Calls today" sub="4 missed · 2 voicemails" delta="+12%" />
-        <StatCard icon={<MessageSquare className="size-5" />} tone="green" value="12" label="Unread messages" sub="Avg reply 4m 20s" />
-        <StatCard icon={<CalendarDays className="size-5" />} tone="orange" value="18" label="Appointments today" sub="3 awaiting confirmation" />
-        <StatCard icon={<CreditCard className="size-5" />} tone="purple" value="$2,480" label="Collected today" sub="6 payments" delta="+8%" />
+  const dashboardScope = account.organization?.name ?? "your practice";
+  // Scoped to this account's own organization — this is each organization's
+  // own admin management, separate from the platform-wide dashboard that's
+  // reserved for the super_admin (system owner).
+  const { data, isLoading } = useQuery({
+    queryKey: ["staff-dashboard-metrics", account.organization?.id ?? null],
+    queryFn: () => getStaffDashboardMetrics(account.organization?.id),
+  });
+  const patients = data?.patients ?? [];
+  const appointments = data?.appointments ?? [];
+  const payments = data?.payments ?? [];
+  const timeEntries = data?.hours ?? [];
+  const forms = data?.forms ?? [];
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(todayStart); tomorrow.setDate(tomorrow.getDate() + 1);
+  const weekStart = new Date(todayStart); weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+  const todayAppointments = appointments.filter((item) => { const start = new Date(item.starts_at); return start >= todayStart && start < tomorrow; });
+  const collected = payments.filter((item) => item.status === "paid").reduce((sum, item) => sum + item.amount_cents, 0);
+  const outstanding = payments.filter((item) => item.status === "pending" || item.status === "overdue").reduce((sum, item) => sum + item.amount_cents, 0);
+  const hours = timeEntries.filter((entry) => new Date(entry.clocked_in_at) >= weekStart).reduce((sum, entry) => {
+    const end = entry.clocked_out_at ? new Date(entry.clocked_out_at).getTime() : now.getTime();
+    return sum + Math.max(0, (end - new Date(entry.clocked_in_at).getTime()) / 3600000 - entry.break_minutes / 60);
+  }, 0);
+  return <AppShell>
+    <PageHeader title="Staff Dashboard" subtitle={`Live ${dashboardScope} activity across patients, care, collections, and labor.`} actions={<Link to="/team" className="rounded bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground">Manage staff</Link>}/>
+    {isLoading ? <p className="py-12 text-sm text-muted-foreground">Loading practice metrics…</p> : <>
+      <div className="grid overflow-hidden rounded-md border border-border sm:grid-cols-2 xl:grid-cols-4"><StatCard icon={<Users/>} value={String(patients.length)} label="Active patients" tone="blue"/><StatCard icon={<CalendarCheck2/>} value={String(todayAppointments.length)} label="Appointments today" tone="purple" sub={`${appointments.length} total scheduled`}/><StatCard icon={<DollarSign/>} value={money(collected)} label="Payments collected" tone="green" sub={`${money(outstanding)} outstanding`}/><StatCard icon={<Clock3/>} value={`${hours.toFixed(1)}h`} label="Staff hours this week" tone="orange" sub={`${timeEntries.length} approved entries`}/></div>
+      <WeeklyCalendar appointments={appointments} forms={forms} hours={timeEntries}/>
+      <div className="mt-4 grid gap-4 xl:grid-cols-[1.35fr_0.65fr]">
+        <Panel title="Upcoming appointments" bodyClassName="p-0"><div className="overflow-x-auto"><table className="w-full min-w-[620px] text-sm"><thead><tr className="border-b border-border text-left text-[11px] text-muted-foreground"><th className="px-4 py-3 font-medium">Patient</th><th className="font-medium">Date & time</th><th className="font-medium">Visit</th><th className="font-medium">Provider</th><th className="font-medium">Status</th></tr></thead><tbody>{appointments.filter((item) => new Date(item.starts_at) >= todayStart).slice(0, 6).map((item) => { const patient = Array.isArray(item.patients) ? item.patients[0] : item.patients; const name = patient ? `${patient.first_name} ${patient.last_name}` : "Unassigned"; return <tr key={item.id} className="border-b border-border last:border-0"><td className="px-4 py-3"><span className="flex items-center gap-3"><Initials name={name}/><b>{name}</b></span></td><td className="text-muted-foreground">{new Date(item.starts_at).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}</td><td className="text-muted-foreground">{item.appointment_type}</td><td className="text-muted-foreground">{item.provider_name}</td><td><Pill tone={toneFor(item.status)}>{item.status.replace("_", " ")}</Pill></td></tr>; })}</tbody></table></div></Panel>
+        <Panel title="Payment overview"><div className="space-y-4"><Metric label="Collected" value={money(collected)} icon={<DollarSign className="size-4"/>}/><Metric label="Outstanding" value={money(outstanding)} icon={<Receipt className="size-4"/>}/><Metric label="Transactions" value={String(payments.length)} icon={<UserRoundCheck className="size-4"/>}/></div><div className="mt-5 border-t border-border pt-4"><div className="flex items-center justify-between text-xs text-muted-foreground"><span>Collection rate</span><b className="text-foreground">{collected + outstanding ? Math.round(collected / (collected + outstanding) * 100) : 0}%</b></div><div className="mt-2 h-1.5 overflow-hidden rounded bg-muted"><div className="h-full bg-primary" style={{ width: `${collected + outstanding ? Math.round(collected / (collected + outstanding) * 100) : 0}%` }}/></div></div></Panel>
       </div>
-
-      <div className="mt-6 grid gap-6 xl:grid-cols-3">
-        <Panel
-          className="xl:col-span-2"
-          title="Today's Schedule"
-          action={
-            <Link to="/schedule" className="inline-flex items-center gap-1 text-sm font-medium text-primary">
-              View schedule <ArrowRight className="size-4" />
-            </Link>
-          }
-          bodyClassName="p-0"
-        >
-          <ul>
-            {appointments.map((a) => (
-              <li key={a.time} className="flex items-center gap-4 border-b border-border px-5 py-4 last:border-0">
-                <span className="w-20 shrink-0 text-sm font-semibold text-foreground">{a.time}</span>
-                <Initials name={a.name} />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-foreground">{a.name}</span>
-                  <span className="block truncate text-xs text-muted-foreground">{a.type}</span>
-                </span>
-                <Pill tone={a.tone}>{a.status}</Pill>
-              </li>
-            ))}
-          </ul>
-        </Panel>
-
-        <Panel title="Recent Activity" bodyClassName="p-0">
-          <ul>
-            {activity.map((item) => {
-              const Icon = item.icon;
-              const bg = {
-                red: "bg-danger-soft text-danger",
-                blue: "bg-info-soft text-primary",
-                green: "bg-success-soft text-success",
-                purple: "bg-purple-soft text-purple",
-                orange: "bg-warning-soft text-warning",
-              }[item.tone];
-              return (
-                <li key={item.title} className="flex items-start gap-3 border-b border-border px-5 py-4 last:border-0">
-                  <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${bg}`}>
-                    <Icon className="size-4" />
-                  </span>
-                  <span>
-                    <span className="block text-sm font-medium text-foreground">{item.title}</span>
-                    <span className="block text-xs text-muted-foreground">{item.meta}</span>
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </Panel>
-      </div>
-
-      <div className="mt-6 grid gap-6 xl:grid-cols-3">
-        <Panel title="Tasks" bodyClassName="p-0" className="xl:col-span-2">
-          <ul>
-            {tasks.map((t) => (
-              <li key={t.label} className="flex items-center gap-3 border-b border-border px-5 py-4 last:border-0">
-                <CheckCircle2 className="size-5 text-muted-foreground" />
-                <span className="flex-1 text-sm text-foreground">{t.label}</span>
-                <Pill tone={t.tone}>{t.due}</Pill>
-              </li>
-            ))}
-          </ul>
-        </Panel>
-
-        <Panel title="Practice Snapshot">
-          <dl className="space-y-4 text-sm">
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">Active patients</dt>
-              <dd className="font-semibold text-foreground">1,284</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">New this month</dt>
-              <dd className="font-semibold text-foreground">46</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">No-show rate</dt>
-              <dd className="font-semibold text-foreground">3.2%</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">Outstanding balances</dt>
-              <dd className="font-semibold text-foreground">$8,412</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-2 text-muted-foreground">
-                <Dot tone="green" /> Practice Fusion sync
-              </dt>
-              <dd className="font-semibold text-success-foreground">Healthy</dd>
-            </div>
-          </dl>
-          <Link
-            to="/patients"
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted"
-          >
-            <Users className="size-4" /> View all patients
-          </Link>
-        </Panel>
-      </div>
-    </AppShell>
-  );
+      <div className="mt-4 grid gap-4 lg:grid-cols-2"><Panel title="Recent payments" bodyClassName="p-0">{payments.slice(0, 5).map((payment) => { const patient = Array.isArray(payment.patients) ? payment.patients[0] : payment.patients; const name = patient ? `${patient.first_name} ${patient.last_name}` : "Patient"; return <div key={payment.id} className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-0"><Initials name={name}/><div className="min-w-0 flex-1"><b className="block text-sm">{name}</b><span className="block truncate text-xs text-muted-foreground">{payment.description}</span></div><b className="text-sm">{money(payment.amount_cents)}</b><Pill tone={toneFor(payment.status)}>{payment.status}</Pill></div>; })}</Panel><Panel title="Staff hours this week" bodyClassName="p-0">{timeEntries.filter((entry) => new Date(entry.clocked_in_at) >= weekStart).map((entry) => { const profile = Array.isArray(entry.profiles) ? entry.profiles[0] : entry.profiles; const end = entry.clocked_out_at ? new Date(entry.clocked_out_at).getTime() : now.getTime(); const duration = Math.max(0, (end - new Date(entry.clocked_in_at).getTime()) / 3600000 - entry.break_minutes / 60); return <div key={entry.id} className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-0"><Initials name={profile?.display_name ?? "Staff"}/><div className="flex-1"><b className="block text-sm">{profile?.display_name ?? "Staff member"}</b><span className="text-xs text-muted-foreground">{new Date(entry.clocked_in_at).toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" })}</span></div><b className="text-sm">{duration.toFixed(1)}h</b><Pill tone={toneFor(entry.status)}>{entry.status}</Pill></div>; })}</Panel></div>
+    </>}
+  </AppShell>;
 }
+
+function Metric({ label, value, icon }: { label: string; value: string; icon: ReactNode }) { return <div className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded bg-muted text-muted-foreground">{icon}</span><span className="flex-1 text-sm text-muted-foreground">{label}</span><b className="text-sm">{value}</b></div>; }

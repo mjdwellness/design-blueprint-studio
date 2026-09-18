@@ -72,13 +72,20 @@ export async function getPlatformOverview() {
   };
 }
 
-export async function getStaffDashboardMetrics() {
+// organizationId scopes every table to one practice — required for org-level
+// staff (org_admin, provider, nurse, front_desk, billing) so nobody outside
+// the platform owner (super_admin) sees another organization's patients,
+// appointments, payments, hours, or forms.
+export async function getStaffDashboardMetrics(organizationId?: string) {
+  const scoped = <T extends { eq: (column: "organization_id", value: string) => T }>(query: T): T =>
+    organizationId ? query.eq("organization_id", organizationId) : query;
+
   const [{ data: patients, error: patientError }, { data: appointments, error: appointmentError }, { data: payments, error: paymentError }, { data: hours, error: hoursError }, { data: forms, error: formsError }] = await Promise.all([
-    supabase.from("patients").select("id,status,created_at"),
-    supabase.from("appointments").select("id,status,starts_at,ends_at,appointment_type,provider_name,patients(first_name,last_name)").order("starts_at"),
-    supabase.from("patient_payments").select("id,amount_cents,status,paid_at,due_at,description,patients(first_name,last_name)").order("created_at", { ascending: false }),
-    supabase.from("staff_time_entries").select("id,user_id,clocked_in_at,clocked_out_at,break_minutes,status,profiles!staff_time_entries_user_id_fkey(display_name)").order("clocked_in_at", { ascending: false }),
-    supabase.from("patient_forms").select("id,form_name,status,due_at,patients(first_name,last_name)").not("due_at", "is", null).order("due_at"),
+    scoped(supabase.from("patients").select("id,status,created_at")),
+    scoped(supabase.from("appointments").select("id,status,starts_at,ends_at,appointment_type,provider_name,patients(first_name,last_name)")).order("starts_at"),
+    scoped(supabase.from("patient_payments").select("id,amount_cents,status,paid_at,due_at,description,patients(first_name,last_name)")).order("created_at", { ascending: false }),
+    scoped(supabase.from("staff_time_entries").select("id,user_id,clocked_in_at,clocked_out_at,break_minutes,status,profiles!staff_time_entries_user_id_fkey(display_name)")).order("clocked_in_at", { ascending: false }),
+    scoped(supabase.from("patient_forms").select("id,form_name,status,due_at,patients(first_name,last_name)")).not("due_at", "is", null).order("due_at"),
   ]);
   const error = patientError ?? appointmentError ?? paymentError ?? hoursError ?? formsError;
   if (error) throw error;
