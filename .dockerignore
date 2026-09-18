@@ -1,0 +1,16 @@
+node_modules
+.output
+.git
+.github
+.lovable
+.wrangler
+.vscode
+.DS_Store
+_archive_previous_nestjs_build
+electron-release
+desktop-installers
+docs
+*.log
+.env
+.env.*
+npm-debug.log*

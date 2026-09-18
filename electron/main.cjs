@@ -1,7 +1,9 @@
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
 
-const APP_URL = "https://id-preview--04f458ee-f120-4e10-af8a-482b8bb51b5e.lovable.app";
+// Overridable at package time: APP_URL=https://<your-azure-app>.azurecontainerapps.io bun run installer:mac
+// Falls back to the Lovable preview until the Azure deployment has a URL.
+const APP_URL = process.env.APP_URL || "https://id-preview--04f458ee-f120-4e10-af8a-482b8bb51b5e.lovable.app";
 
 function createWindow() {
   const win = new BrowserWindow({
