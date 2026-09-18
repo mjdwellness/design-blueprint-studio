@@ -24,6 +24,10 @@ type Account = {
 
 const AuthContext = createContext<Account | null>(null);
 const PUBLIC_PATHS = new Set(["/auth", "/reset-password"]);
+// Platform-wide pages the system owner (super_admin) can see but an
+// organization-level admin (org_admin) should not — org_admin is scoped
+// to their own organization, not every customer on the platform.
+const SUPER_ADMIN_ONLY_PATHS = ["/admin/integrations"];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -78,6 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!session && !isPublic) void navigate({ to: "/auth", replace: true });
     if (session && location.pathname === "/auth") void navigate({ to: role === "patient" ? "/portal" : role === "super_admin" || role === "org_admin" ? "/admin" : "/", replace: true });
     if (session && location.pathname.startsWith("/admin") && role !== "super_admin" && role !== "org_admin") void navigate({ to: role === "patient" ? "/portal" : "/", replace: true });
+    if (session && role !== "super_admin" && SUPER_ADMIN_ONLY_PATHS.some((path) => location.pathname.startsWith(path))) void navigate({ to: "/admin", replace: true });
     if (session && role === "patient" && !location.pathname.startsWith("/portal") && !isPublic) void navigate({ to: "/portal", replace: true });
   }, [loading, location.pathname, navigate, role, session]);
 

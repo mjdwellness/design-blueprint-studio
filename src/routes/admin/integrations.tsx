@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, Plug, RefreshCcw } from "lucide-react";
 import { AdminListPage } from "@/components/app/admin-page";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/admin/integrations")({
   head: () => ({
@@ -13,7 +14,17 @@ export const Route = createFileRoute("/admin/integrations")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => (
+  component: IntegrationsAdminPage,
+});
+
+// This page spans every customer organization, so it's reserved for the
+// super_admin (the platform/system owner). org_admin is redirected back to
+// /admin by the central guard in auth.tsx; this check just avoids a flash
+// of cross-tenant data while that redirect is in flight.
+function IntegrationsAdminPage() {
+  const account = useAccount();
+  if (account.role !== "super_admin") return null;
+  return (
     <AdminListPage
       title="Integrations"
       subtitle="Connections each organization has enabled, and their current sync health."
@@ -34,5 +45,5 @@ export const Route = createFileRoute("/admin/integrations")({
         ["Practice Fusion", "Cedar Clinic", "Patients", "6 days ago", "Disconnected"],
       ]}
     />
-  ),
-});
+  );
+}

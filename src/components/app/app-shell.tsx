@@ -126,8 +126,11 @@ export function AppShell({
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = variant === "admin";
-  const railItems = (isAdmin ? adminPrimary : staffPrimary).slice(0, 7);
   const account = useAccount();
+  // Integrations is platform-wide (every organization's connections) — only
+  // the super_admin (system owner) sees it. org_admin stays organization-level.
+  const visibleAdminPrimary = account.role === "super_admin" ? adminPrimary : adminPrimary.filter((item) => item.to !== "/admin/integrations");
+  const railItems = (isAdmin ? visibleAdminPrimary : staffPrimary).slice(0, 7);
   const workspaceName = isAdmin && account.role === "super_admin" ? "Platform Administration" : account.organization?.name ?? "Practice workspace";
   const initials = account.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
 
@@ -173,7 +176,7 @@ export function AppShell({
         <div className="flex-1 overflow-y-auto px-2 py-3">
           <div className="mb-2 px-2 text-[9px] font-semibold uppercase text-sidebar-foreground/60">Workspace</div>
           {isAdmin ? (
-            <NavLinks items={adminPrimary} pathname={pathname} />
+            <NavLinks items={visibleAdminPrimary} pathname={pathname} />
           ) : (
             <>
               <NavLinks items={staffPrimary} pathname={pathname} />
