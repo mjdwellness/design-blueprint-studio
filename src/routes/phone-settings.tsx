@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Phone, PhoneForwarded, Plus, Voicemail } from "lucide-react";
 import { AppShell } from "@/components/app/app-shell";
 import { PageHeader, Panel, Pill } from "@/components/app/kit";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/phone-settings")({
   head: () => ({
@@ -55,11 +56,13 @@ const routing = [
 ];
 
 function PhoneSettingsPage() {
+  const account = useAccount();
+  const practiceName = account.organization?.name ?? "your practice";
   return (
     <AppShell searchPlaceholder="Search phone settings...">
       <PageHeader
         title="Phone Settings"
-        subtitle="Voice and SMS are delivered through Telnyx for MJD Wellness."
+        subtitle={`Voice and SMS are delivered through Telnyx for ${practiceName}.`}
         actions={
           <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
             <Plus className="size-4" /> Add Number
@@ -125,7 +128,8 @@ function PhoneSettingsPage() {
             <label className="text-xs font-medium text-muted-foreground">Greeting</label>
             <textarea
               rows={3}
-              defaultValue="You've reached MJD Wellness. Please leave your name, number and reason for calling and we'll return your call within one business day."
+              key={`voicemail-${practiceName}`}
+              defaultValue={`You've reached ${practiceName}. Please leave your name, number and reason for calling and we'll return your call within one business day.`}
               className="mt-1.5 w-full rounded-xl border border-border bg-surface p-3 text-sm outline-none focus:ring-2 focus:ring-ring/40"
             />
           </div>
@@ -155,7 +159,8 @@ function PhoneSettingsPage() {
             <label className="text-xs font-medium text-muted-foreground">Message</label>
             <textarea
               rows={3}
-              defaultValue="Thanks for contacting MJD Wellness! We're currently closed. Reply here and our team will respond during business hours. For emergencies, call 911."
+              key={`reply-${practiceName}`}
+              defaultValue={`Thanks for contacting ${practiceName}! We're currently closed. Reply here and our team will respond during business hours. For emergencies, call 911.`}
               className="mt-1.5 w-full rounded-xl border border-border bg-surface p-3 text-sm outline-none focus:ring-2 focus:ring-ring/40"
             />
           </div>

@@ -128,6 +128,7 @@ export function AppShell({
   const isAdmin = variant === "admin";
   const railItems = (isAdmin ? adminPrimary : staffPrimary).slice(0, 7);
   const account = useAccount();
+  const workspaceName = isAdmin && account.role === "super_admin" ? "Platform Administration" : account.organization?.name ?? "Practice workspace";
   const initials = account.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
 
   return (
@@ -164,8 +165,8 @@ export function AppShell({
         <Link to={isAdmin ? "/admin" : "/"} className="flex h-14 items-center gap-2 border-b border-sidebar-border px-4 text-primary">
           <LeafMark className="size-6" />
           <span className="leading-tight">
-            <span className="block text-sm font-semibold text-foreground">MJD Wellness</span>
-            <span className="block text-[9px] text-sidebar-foreground">Practice workspace</span>
+            <span className="block truncate text-sm font-semibold text-foreground">{workspaceName}</span>
+            <span className="block text-[9px] text-sidebar-foreground">{isAdmin && account.role === "super_admin" ? "All organizations" : "Practice workspace"}</span>
           </span>
         </Link>
 
@@ -224,7 +225,7 @@ export function AppShell({
                   {account.displayName}
                 </span>
                 <span className="block text-[9px] text-muted-foreground">
-                  {account.role === "super_admin" ? "Platform Administrator" : account.role === "patient" ? "Patient account" : "MJD Wellness"}
+                   {account.role === "super_admin" ? "Platform Administrator" : account.role === "patient" ? "Patient account" : account.organization?.name ?? "Practice workspace"}
                 </span>
               </span>
               <Button variant="ghost" size="icon" onClick={() => void account.signOut()} aria-label="Sign out" title="Sign out" className="size-8"><LogOut className="size-4" /></Button>

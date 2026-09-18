@@ -1,21 +1,25 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const MJD_ORG_ID = "10000000-0000-0000-0000-000000000001";
-
-export async function getPatients() {
-  const { data, error } = await supabase.from("patients").select("*").order("last_name");
+export async function getPatients(organizationId?: string) {
+  let query = supabase.from("patients").select("*").order("last_name");
+  if (organizationId) query = query.eq("organization_id", organizationId);
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 }
 
-export async function getAppointments() {
-  const { data, error } = await supabase.from("appointments").select("*, patients(first_name,last_name,patient_number)").order("starts_at");
+export async function getAppointments(organizationId?: string) {
+  let query = supabase.from("appointments").select("*, patients(first_name,last_name,patient_number)").order("starts_at");
+  if (organizationId) query = query.eq("organization_id", organizationId);
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 }
 
-export async function getCalls() {
-  const { data, error } = await supabase.from("calls").select("*, patients(first_name,last_name)").order("started_at", { ascending: false });
+export async function getCalls(organizationId?: string) {
+  let query = supabase.from("calls").select("*, patients(first_name,last_name)").order("started_at", { ascending: false });
+  if (organizationId) query = query.eq("organization_id", organizationId);
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 }
