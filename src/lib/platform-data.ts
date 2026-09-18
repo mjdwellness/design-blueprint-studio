@@ -44,6 +44,34 @@ export async function getAdminRecords(kind: "organizations" | "locations" | "use
   return (await supabase.from("profiles").select("*, user_roles(role), organization_memberships(title, organizations(name))").order("created_at", { ascending: false })).data ?? [];
 }
 
+export async function getPlatformOverview() {
+  const [
+    { data: organizations, error: orgError },
+    { data: profiles, error: profileError },
+    { data: calls, error: callError },
+    { count: messageCount, error: messageError },
+    { data: payments, error: paymentError },
+    { data: subscriptions, error: subError },
+  ] = await Promise.all([
+    supabase.from("organizations").select("id,name,slug,specialty,status,practice_size,created_at").order("created_at", { ascending: false }),
+    supabase.from("profiles").select("id,display_name,status,created_at"),
+    supabase.from("calls").select("id,organization_id,started_at,status,duration_seconds,direction,organizations(name)").order("started_at", { ascending: false }),
+    supabase.from("messages").select("id", { count: "exact", head: true }),
+    supabase.from("patient_payments").select("id,organization_id,amount_cents,status,paid_at,created_at,organizations(name)").order("created_at", { ascending: false }),
+    supabase.from("subscriptions").select("id,organization_id,plan_name,monthly_amount_cents,status,organizations(name)"),
+  ]);
+  const error = orgError ?? profileError ?? callError ?? messageError ?? paymentError ?? subError;
+  if (error) throw error;
+  return {
+    organizations: organizations ?? [],
+    profiles: profiles ?? [],
+    calls: calls ?? [],
+    messageCount: messageCount ?? 0,
+    payments: payments ?? [],
+    subscriptions: subscriptions ?? [],
+  };
+}
+
 export async function getStaffDashboardMetrics() {
   const [{ data: patients, error: patientError }, { data: appointments, error: appointmentError }, { data: payments, error: paymentError }, { data: hours, error: hoursError }, { data: forms, error: formsError }] = await Promise.all([
     supabase.from("patients").select("id,status,created_at"),

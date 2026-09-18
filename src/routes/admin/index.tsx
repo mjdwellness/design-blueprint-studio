@@ -7,6 +7,7 @@ import { Initials, PageHeader, Panel, Pill, StatCard, type Tone } from "@/compon
 import { getStaffDashboardMetrics } from "@/lib/platform-data";
 import { WeeklyCalendar } from "@/components/app/weekly-calendar";
 import { useAccount } from "@/lib/auth";
+import { PlatformDashboard } from "@/components/app/platform-dashboard";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [
@@ -23,7 +24,8 @@ const toneFor = (status: string): Tone => status === "paid" || status === "compl
 
 function Dashboard() {
   const account = useAccount();
-  const dashboardScope = account.role === "super_admin" ? "all organizations" : account.organization?.name ?? "your practice";
+  if (account.role === "super_admin") return <PlatformDashboard />;
+  const dashboardScope = account.organization?.name ?? "your practice";
   const { data, isLoading } = useQuery({ queryKey: ["staff-dashboard-metrics"], queryFn: getStaffDashboardMetrics });
   const patients = data?.patients ?? [];
   const appointments = data?.appointments ?? [];
