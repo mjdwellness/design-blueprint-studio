@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { MJD_ORG_ID } from "@/lib/platform-data";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/forms")({
   head: () => ({ meta: [
@@ -40,6 +40,8 @@ async function loadFormsWorkspace() {
 }
 
 function FormsPage() {
+  const account = useAccount();
+  const organizationId = account.organization?.id;
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({ queryKey: ["forms-workspace"], queryFn: loadFormsWorkspace });
   const [builderOpen, setBuilderOpen] = useState(false);
@@ -56,7 +58,8 @@ function FormsPage() {
       const validFields = fields.filter((field) => field.label.trim());
       if (!name.trim() || !validFields.length) throw new Error("Add a form name and at least one field.");
       const { data: user } = await supabase.auth.getUser();
-      const { data: template, error } = await supabase.from("form_templates").insert({ organization_id: MJD_ORG_ID, name: name.trim(), description: description.trim() || null, status: "published", created_by: user.user?.id ?? null }).select().single();
+      if (!organizationId) throw new Error("No practice is linked to this account.");
+      const { data: template, error } = await supabase.from("form_templates").insert({ organization_id: organizationId, name: name.trim(), description: description.trim() || null, status: "published", created_by: user.user?.id ?? null }).select().single();
       if (error) throw error;
       const { error: fieldError } = await supabase.from("form_fields").insert(validFields.map((field, position) => ({ template_id: template.id, label: field.label.trim(), field_type: field.field_type, required: field.required, position })));
       if (fieldError) throw fieldError;

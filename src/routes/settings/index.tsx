@@ -7,7 +7,7 @@ import { AppShell } from "@/components/app/app-shell";
 import { PageHeader, Panel } from "@/components/app/kit";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { MJD_ORG_ID } from "@/lib/platform-data";
+import { useAccount } from "@/lib/auth";
 
 export const Route = createFileRoute("/settings/")({
   head: () => ({
@@ -69,17 +69,21 @@ function Field({ label, value, onChange, type = "text", required = false }: { la
 }
 
 function SettingsPage() {
+  const account = useAccount();
+  const organizationId = account.organization?.id;
   const [tab, setTab] = useState("General");
   const [general, setGeneral] = useState<GeneralSettings>(defaultGeneralSettings);
   const queryClient = useQueryClient();
   const { data: settingsData, isLoading } = useQuery({
-    queryKey: ["organization-settings", MJD_ORG_ID],
+    queryKey: ["organization-settings", organizationId],
+    enabled: Boolean(organizationId),
     queryFn: async () => {
+      if (!organizationId) throw new Error("No practice is linked to this account.");
       const [organizationResult, locationsResult, membersResult, subscriptionResult] = await Promise.all([
-        supabase.from("organizations").select("id,name,specialty,phone,email,website,practice_size,address,timezone,created_at").eq("id", MJD_ORG_ID).single(),
-        supabase.from("locations").select("id", { count: "exact", head: true }).eq("organization_id", MJD_ORG_ID),
-        supabase.from("organization_memberships").select("id", { count: "exact", head: true }).eq("organization_id", MJD_ORG_ID).eq("status", "active"),
-        supabase.from("subscriptions").select("plan_name").eq("organization_id", MJD_ORG_ID).maybeSingle(),
+        supabase.from("organizations").select("id,name,specialty,phone,email,website,practice_size,address,timezone,created_at").eq("id", organizationId).single(),
+        supabase.from("locations").select("id", { count: "exact", head: true }).eq("organization_id", organizationId),
+        supabase.from("organization_memberships").select("id", { count: "exact", head: true }).eq("organization_id", organizationId).eq("status", "active"),
+        supabase.from("subscriptions").select("plan_name").eq("organization_id", organizationId).maybeSingle(),
       ]);
       if (organizationResult.error) throw organizationResult.error;
       return {
@@ -112,6 +116,7 @@ function SettingsPage() {
 
   const saveGeneral = useMutation({
     mutationFn: async () => {
+      if (!organizationId) throw new Error("No practice is linked to this account.");
       const name = general.name.trim();
       const specialty = general.specialty.trim();
       if (!name || !specialty) throw new Error("Practice name and specialty are required.");
@@ -125,12 +130,13 @@ function SettingsPage() {
         address: general.address.trim() || null,
         timezone: general.timezone,
         updated_at: new Date().toISOString(),
-      }).eq("id", MJD_ORG_ID);
+      }).eq("id", organizationId);
       if (error) throw error;
     },
     onSuccess: async () => {
       toast.success("Settings saved");
-      await queryClient.invalidateQueries({ queryKey: ["organization-settings", MJD_ORG_ID] });
+      await account.refreshOrganization();
+      await queryClient.invalidateQueries({ queryKey: ["organization-settings", organizationId] });
     },
     onError: (error) => toast.error(error.message),
   });
@@ -139,7 +145,7 @@ function SettingsPage() {
     <AppShell searchPlaceholder="Search settings...">
       <PageHeader
         title="Settings"
-        subtitle="Organization #001 · MJD Wellness"
+        subtitle={account.organization?.name ?? "Practice workspace"}
         actions={
           <Link
             to="/settings/roles"
